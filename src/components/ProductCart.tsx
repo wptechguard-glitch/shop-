@@ -8,13 +8,24 @@ interface ProductCardProps {
   onAddToCart: (id: number) => void;
   onToggleWishlist: (id: number) => void;
   isWishlisted: boolean;
+  onNavigate?: (page: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggleWishlist, isWishlisted }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onAddToCart,
+  onToggleWishlist,
+  isWishlisted,
+  onNavigate,
+}) => {
   const [activeImg, setActiveImg] = useState(0);
 
   return (
-    <div className="product-card">
+    <div
+      className="product-card"
+      onClick={() => onNavigate?.(`product:${product.id}`)}
+      style={{ cursor: "pointer" }}
+    >
       <div className="product-image-wrap">
         <div className="discount-ribbon">{product.discount}% OFF</div>
         <img
@@ -24,7 +35,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
         />
         <button
           className={`wishlist-btn ${isWishlisted ? "active" : ""}`}
-          onClick={() => onToggleWishlist(product.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleWishlist(product.id);
+          }}
         >
           <FiHeart />
         </button>
@@ -33,7 +47,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
             <span
               key={idx}
               className={`thumb-dot ${activeImg === idx ? "active" : ""}`}
-              onMouseEnter={() => setActiveImg(idx)}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+                setActiveImg(idx);
+              }}
             />
           ))}
         </div>
@@ -47,7 +64,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onToggl
           <span className="original-price">₹{product.originalPrice}</span>
           <span className="discount">{product.discount}% off</span>
         </div>
-        <button className="add-cart-btn" onClick={() => onAddToCart(product.id)}>
+        <button
+          className="add-cart-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart(product.id);
+          }}
+        >
           <FiShoppingCart className="icon" /> Add to Cart
         </button>
       </div>

@@ -6,6 +6,7 @@ interface CategoryProps {
   onAddToCart: (id: number) => void;
   onToggleWishlist: (id: number) => void;
   wishlist: number[];
+  onNavigate: (page: string) => void;
 }
 
 const categoryList = [
@@ -14,7 +15,7 @@ const categoryList = [
   "Peplum", "Long", "Short", "Ethnic", "Embroidered",
 ];
 
-const Category: React.FC<CategoryProps> = ({ onAddToCart, onToggleWishlist, wishlist }) => {
+const Category: React.FC<CategoryProps> = ({ onAddToCart, onToggleWishlist, wishlist, onNavigate }) => {
   const [active, setActive] = useState("All");
 
   const filtered = active === "All" ? products : products.filter((p) => p.name.includes(active));
@@ -46,6 +47,7 @@ const Category: React.FC<CategoryProps> = ({ onAddToCart, onToggleWishlist, wish
               onAddToCart={onAddToCart}
               onToggleWishlist={onToggleWishlist}
               isWishlisted={wishlist.includes(p.id)}
+              onNavigate={onNavigate}
             />
           ))}
         </div>

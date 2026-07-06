@@ -9,6 +9,7 @@ import Category from "./components/Category";
 import Wishlist from "./components/Wishlist";
 import CartPage from "./components/CartPage";
 import ProductCard from "./components/ProductCart";
+import ProductDetail from "./components/ProductDetail";
 import { products } from "./data/products";
 import HeroBanner from "./components/HeroBanner";
 import FeaturesRow from "./components/FeaturesRow";
@@ -58,9 +59,23 @@ const App: React.FC = () => {
     if (page === "register") return <Register onNavigate={setPage} />;
     if (page === "payment") return <Payment totalAmount={cartTotal} onNavigate={setPage} />;
     if (page === "category")
-      return <Category onAddToCart={addToCart} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
+      return (
+        <Category
+          onAddToCart={addToCart}
+          onToggleWishlist={toggleWishlist}
+          wishlist={wishlist}
+          onNavigate={setPage}
+        />
+      );
     if (page === "wishlist")
-      return <Wishlist wishlist={wishlist} onAddToCart={addToCart} onToggleWishlist={toggleWishlist} />;
+      return (
+        <Wishlist
+          wishlist={wishlist}
+          onAddToCart={addToCart}
+          onToggleWishlist={toggleWishlist}
+          onNavigate={setPage}
+        />
+      );
     if (page === "cart")
       return (
         <CartPage
@@ -71,36 +86,48 @@ const App: React.FC = () => {
           onNavigate={setPage}
         />
       );
+    if (page.startsWith("product:")) {
+      const id = Number(page.split(":")[1]);
+      return (
+        <ProductDetail
+          productId={id}
+          onAddToCart={addToCart}
+          onToggleWishlist={toggleWishlist}
+          wishlist={wishlist}
+          onNavigate={setPage}
+        />
+      );
+    }
 
     return (
-  <>
-    <HeroBanner onNavigate={setPage} />
+      <>
+        <HeroBanner onNavigate={setPage} />
 
-    <ScrollReveal>
-      <FeaturesRow />
-    </ScrollReveal>
+        <ScrollReveal>
+          <FeaturesRow />
+        </ScrollReveal>
 
-    <ScrollReveal delay={100}>
-      <CategoryShowcase onNavigate={setPage} />
-    </ScrollReveal>
+        <ScrollReveal delay={100}>
+          <CategoryShowcase onNavigate={setPage} />
+        </ScrollReveal>
 
-    <ScrollReveal delay={150}>
-      <SectionHeader title="Trending Kurtis" onViewAll={() => setPage("category")} />
-      <div className="product-grid">
-        {products.slice(0, 10).map((p) => (
-          <ProductCard
-            key={p.id}
-            product={p}
-            onAddToCart={addToCart}
-            onToggleWishlist={toggleWishlist}
-            isWishlisted={wishlist.includes(p.id)}
-          />
-        ))}
-      </div>
-    </ScrollReveal>
-  </>
-);
-
+        <ScrollReveal delay={150}>
+          <SectionHeader title="Trending Kurtis" onViewAll={() => setPage("category")} />
+          <div className="product-grid">
+            {products.slice(0, 10).map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                onAddToCart={addToCart}
+                onToggleWishlist={toggleWishlist}
+                isWishlisted={wishlist.includes(p.id)}
+                onNavigate={setPage}
+              />
+            ))}
+          </div>
+        </ScrollReveal>
+      </>
+    );
   };
 
   return (

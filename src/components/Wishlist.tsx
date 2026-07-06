@@ -7,9 +7,10 @@ interface WishlistProps {
   wishlist: number[];
   onAddToCart: (id: number) => void;
   onToggleWishlist: (id: number) => void;
+  onNavigate: (page: string) => void;
 }
 
-const Wishlist: React.FC<WishlistProps> = ({ wishlist, onAddToCart, onToggleWishlist }) => {
+const Wishlist: React.FC<WishlistProps> = ({ wishlist, onAddToCart, onToggleWishlist, onNavigate }) => {
   const items = products.filter((p) => wishlist.includes(p.id));
 
   if (items.length === 0) {
@@ -31,6 +32,7 @@ const Wishlist: React.FC<WishlistProps> = ({ wishlist, onAddToCart, onToggleWish
           onAddToCart={onAddToCart}
           onToggleWishlist={onToggleWishlist}
           isWishlisted={true}
+          onNavigate={onNavigate}
         />
       ))}
     </div>
