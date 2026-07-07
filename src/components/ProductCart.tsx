@@ -19,20 +19,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onNavigate,
 }) => {
   const [activeImg, setActiveImg] = useState(0);
+  const outOfStock = !product.inStock;
 
   return (
     <div
-      className="product-card"
+      className={`product-card ${outOfStock ? "out-of-stock" : ""}`}
       onClick={() => onNavigate?.(`product:${product.id}`)}
       style={{ cursor: "pointer" }}
     >
       <div className="product-image-wrap">
-        <div className="discount-ribbon">{product.discount}% OFF</div>
+        {outOfStock ? (
+          <div className="out-of-stock-badge">Out of Stock</div>
+        ) : (
+          <div className="discount-ribbon">{product.discount}% OFF</div>
+        )}
+
         <img
-          src={product.images[activeImg] || "https://via.placeholder.com/300x380?text=Kurti"}
+          src={product.images[activeImg] || "https://via.placeholder.com/300x380?text=ShopKart"}
           alt={product.name}
-          className="product-image"
+          className={`product-image ${outOfStock ? "dimmed" : ""}`}
         />
+
         <button
           className={`wishlist-btn ${isWishlisted ? "active" : ""}`}
           onClick={(e) => {
@@ -42,6 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <FiHeart />
         </button>
+
         <div className="thumb-row">
           {product.images.map((_, idx) => (
             <span
@@ -54,6 +62,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             />
           ))}
         </div>
+
+        {outOfStock && <div className="out-of-stock-overlay">Currently Unavailable</div>}
       </div>
 
       <div className="product-info">
@@ -62,16 +72,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="price-row">
           <span className="price">₹{product.price}</span>
           <span className="original-price">₹{product.originalPrice}</span>
-          <span className="discount">{product.discount}% off</span>
+          {!outOfStock && <span className="discount">{product.discount}% off</span>}
         </div>
+
         <button
           className="add-cart-btn"
+          disabled={outOfStock}
           onClick={(e) => {
             e.stopPropagation();
-            onAddToCart(product.id);
+            if (!outOfStock) onAddToCart(product.id);
           }}
         >
-          <FiShoppingCart className="icon" /> Add to Cart
+          <FiShoppingCart className="icon" />
+          {outOfStock ? "Out of Stock" : "Add to Cart"}
         </button>
       </div>
     </div>

@@ -71,7 +71,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="footer-col">
           <h4>Get In Touch</h4>
           <p><FiMapPin /> Jaipur, Rajasthan, India</p>
-          <p><FiPhone /> +91 98765 43210</p>
+          <p><FiPhone /> +91 90000 00000</p>
           <p><FiMail /> support@shopkart.com</p>
         </div>
       </div>
