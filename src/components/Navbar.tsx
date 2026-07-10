@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { FiSearch, FiMenu, FiHeart, FiShoppingCart, FiHome, FiGrid, FiUser, FiX } from "react-icons/fi";
+import { FiSearch, FiMenu, FiHeart, FiShoppingCart, FiHome, FiGrid, FiUser, FiX, FiLogOut } from "react-icons/fi";
 import "../index.css";
+
+interface AuthUser {
+  id: string;
+  fullName: string;
+  email: string;
+}
 
 interface NavbarProps {
   cartCount: number;
   wishlistCount: number;
   onNavigate: (page: string) => void;
+  currentUser?: AuthUser | null;
+  onLogout?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate }) => {
+const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, currentUser, onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,9 +58,32 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate })
             <FiShoppingCart className="icon" /><span>Cart</span>
             {cartCount > 0 && <span className="badge">{cartCount}</span>}
           </div>
-          <div className="nav-item" onClick={() => onNavigate("login")}>
-            <FiUser className="icon" /><span>Login</span>
-          </div>
+
+          {currentUser ? (
+            <div className="nav-item user-menu-wrap" onClick={() => setUserMenuOpen(!userMenuOpen)}>
+              <FiUser className="icon" />
+              <span>Hi, {currentUser.fullName.split(" ")[0]}</span>
+              {userMenuOpen && (
+                <div className="user-dropdown">
+                  <div onClick={() => { onNavigate("orders"); setUserMenuOpen(false); }}>
+                    My Orders
+                  </div>
+                  <div
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      onLogout?.();
+                    }}
+                  >
+                    <FiLogOut className="icon" /> Logout
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="nav-item" onClick={() => onNavigate("login")}>
+              <FiUser className="icon" /><span>Login</span>
+            </div>
+          )}
         </div>
 
         <div className="menu-icon mobile-only" onClick={() => setMenuOpen(!menuOpen)}>
@@ -61,9 +93,27 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate })
 
       {menuOpen && (
         <div className="mobile-menu">
-          <div onClick={() => { onNavigate("login"); setMenuOpen(false); }}><FiUser className="icon" /> Login</div>
-          <div onClick={() => { onNavigate("register"); setMenuOpen(false); }}>Register</div>
-          <div onClick={() => { onNavigate("orders"); setMenuOpen(false); }}>My Orders</div>
+          {currentUser ? (
+            <>
+              <div>Hi, {currentUser.fullName.split(" ")[0]}</div>
+              <div onClick={() => { onNavigate("orders"); setMenuOpen(false); }}>
+                <FiUser className="icon" /> My Orders
+              </div>
+              <div
+                onClick={() => {
+                  setMenuOpen(false);
+                  onLogout?.();
+                }}
+              >
+                <FiLogOut className="icon" /> Logout
+              </div>
+            </>
+          ) : (
+            <>
+              <div onClick={() => { onNavigate("login"); setMenuOpen(false); }}><FiUser className="icon" /> Login</div>
+              <div onClick={() => { onNavigate("register"); setMenuOpen(false); }}>Register</div>
+            </>
+          )}
         </div>
       )}
     </nav>

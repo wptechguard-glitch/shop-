@@ -4,24 +4,30 @@ import "../index.css";
 
 interface PaymentProps {
   totalAmount: number;
-  onNavigate: (page: string) => void;
+  onNavigate?: (page: string) => void;
   onPlaceOrder: (method: string) => void;
 }
 
-const Payment: React.FC<PaymentProps> = ({ totalAmount, onNavigate, onPlaceOrder }) => {
+const Payment: React.FC<PaymentProps> = ({ totalAmount, onPlaceOrder }) => {
   const [method, setMethod] = useState<"card" | "upi" | "cod">("card");
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [upiId, setUpiId] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handlePay = (e: React.FormEvent) => {
+  const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Real payment gateway (Razorpay/Stripe) checkout call will go here from the backend
     const methodLabel = method === "card" ? "Credit/Debit Card" : method === "upi" ? "UPI" : "Cash on Delivery";
-    onPlaceOrder(methodLabel);
-    onNavigate("order-success");
+    setLoading(true);
+    try {
+      await onPlaceOrder(methodLabel);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -124,8 +130,8 @@ const Payment: React.FC<PaymentProps> = ({ totalAmount, onNavigate, onPlaceOrder
               </p>
             )}
 
-            <button type="submit" className="auth-btn">
-              {method === "cod" ? "Place Order" : `Pay ₹${totalAmount}`}
+            <button type="submit" className="auth-btn" disabled={loading}>
+              {loading ? "Processing..." : method === "cod" ? "Place Order" : `Pay ₹${totalAmount}`}
             </button>
           </form>
         </div>

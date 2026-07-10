@@ -87,8 +87,8 @@ const CartPage: React.FC<CartPageProps> = ({ cart, onIncrement, onDecrement, onR
         </div>
         <p className="savings-msg">Aap ₹{savings} bacha rahe hain is order par</p>
 
-        <button className="checkout-btn" onClick={() => onNavigate("payment")}>
-          Place Order
+        <button className="checkout-btn" onClick={() => onNavigate("checkout")}>
+          Proceed to Checkout
         </button>
       </div>
     </div>

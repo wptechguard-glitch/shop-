@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
+import { API_BASE_URL } from "../api";
 
 interface LoginProps {
   onNavigate: (page: string) => void;
-  onLoginSuccess: (email: string) => void;
+  onLoginSuccess: (token: string, user: { id: string; fullName: string; email: string }) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
@@ -11,21 +12,41 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!email || !password) {
       setError("Please enter both email and password");
       return;
     }
-    setError("");
-    onLoginSuccess(email);
-    onNavigate("home");
-  };
 
-  const handleAutofill = () => {
-    setEmail("admin@shopkart.com");
-    setPassword("password123");
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Login failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      onLoginSuccess(data.token, data.user);
+      onNavigate("home");
+    } catch (err) {
+      setError("Unable to connect to server. Please check your internet connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,18 +126,10 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
 
             {error && <p className="auth-error">{error}</p>}
 
-            <button type="submit" className="auth-btn">SIGN IN</button>
-          </form>
-
-          <div className="demo-box">
-            <div>
-              <span className="demo-label">DEMO ACCOUNT</span>
-              <p>admin@shopkart.com / password123</p>
-            </div>
-            <button className="autofill-btn" onClick={handleAutofill}>
-              AUTO-FILL
+            <button type="submit" className="auth-btn" disabled={loading}>
+              {loading ? "Signing in..." : "SIGN IN"}
             </button>
-          </div>
+          </form>
 
           <p className="auth-switch">
             New to ShopKart? <span onClick={() => onNavigate("register")}>Create Account</span>
