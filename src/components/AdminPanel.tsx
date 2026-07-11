@@ -132,6 +132,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
   const [prodCategory, setProdCategory] = useState<"Women" | "Men">("Women");
   const [prodInStock, setProdInStock] = useState(true);
   const [prodImages, setProdImages] = useState<string[]>(["", "", "", ""]);
+  const [prodStockQty, setProdStockQty] = useState<string>("50");
   const [actionLoading, setActionLoading] = useState(false);
 
   const headers = {
@@ -205,6 +206,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     const discountPercent = origPriceNum > priceNum 
       ? Math.round(((origPriceNum - priceNum) / origPriceNum) * 100)
       : 0;
+    const stockQtyNum = Number(prodStockQty) || 0;
+    // Auto mark out of stock if qty is 0
+    const effectiveInStock = stockQtyNum > 0 ? prodInStock : false;
 
     // Filter empty image URLs and supply placeholder if none provided
     const validImages = prodImages.filter((img) => img.trim() !== "");
@@ -215,7 +219,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       originalPrice: origPriceNum,
       discount: discountPercent,
       category: prodCategory,
-      inStock: prodInStock,
+      inStock: effectiveInStock,
+      stockQuantity: stockQtyNum,
       images: validImages.length > 0 ? validImages : ["https://via.placeholder.com/300x380?text=ShopKart"],
       rating: 4.0
     };
@@ -283,6 +288,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     setProdOriginalPrice(String(p.originalPrice));
     setProdCategory(p.category);
     setProdInStock(p.inStock);
+    setProdStockQty(String(p.stockQuantity ?? 50));
     
     // Fill images up to 4 elements
     const filledImages = [...p.images];
@@ -290,7 +296,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     setProdImages(filledImages);
     
     setShowProductForm(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // No scroll — form is now a modal overlay
   };
 
   const resetProductForm = () => {
@@ -300,6 +306,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     setProdOriginalPrice("");
     setProdCategory("Women");
     setProdInStock(true);
+    setProdStockQty("50");
     setProdImages(["", "", "", ""]);
     setShowProductForm(false);
   };
@@ -385,115 +392,157 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
 
       <div className="admin-body">
         
-        {/* ── Product Add/Edit Form Card (Shown on products tab) ── */}
-        {activeTab === "products" && (showProductForm || editingProductId) && (
-          <div className="admin-product-form-card">
-            <div className="form-card-header">
-              <h3>{editingProductId ? "📝 Edit Product Details" : "✨ Add New Kurti / Product"}</h3>
-              <button className="form-close-btn" onClick={resetProductForm}><FiX size={18} /></button>
-            </div>
+        {/* ── Product Add/Edit Modal Overlay (shown whenever form is open) ── */}
+        {(showProductForm || editingProductId !== null) && (
+          <div className="admin-modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) resetProductForm(); }}>
+            <div className="admin-modal-box">
+              <div className="form-card-header">
+                <h3>{editingProductId ? "📝 Edit Product Details" : "✨ Add New Kurti / Product"}</h3>
+                <button className="form-close-btn" onClick={resetProductForm}><FiX size={18} /></button>
+              </div>
 
-            <form onSubmit={handleSaveProduct} className="admin-product-form">
-              <div className="form-grid">
-                <div className="form-group span-2">
-                  <label>Product Name (Required)</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Lavender Zari Work Khadi Angrakha Kurti"
-                    value={prodName}
-                    onChange={(e) => setProdName(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Rate / Price (₹) (Required)</label>
-                  <input
-                    type="number"
-                    required
-                    placeholder="e.g. 599"
-                    value={prodPrice}
-                    onChange={(e) => setProdPrice(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Original Price (₹) (Required)</label>
-                  <input
-                    type="number"
-                    required
-                    placeholder="e.g. 1199"
-                    value={prodOriginalPrice}
-                    onChange={(e) => setProdOriginalPrice(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Category</label>
-                  <select 
-                    value={prodCategory} 
-                    onChange={(e) => setProdCategory(e.target.value as "Women" | "Men")}
-                  >
-                    <option value="Women">Women's Kurtis</option>
-                    <option value="Men">Men's Kurta / Ethnic</option>
-                  </select>
-                </div>
-
-                <div className="form-group checkbox-group">
-                  <label className="switch-label">
+              <form onSubmit={handleSaveProduct} className="admin-product-form">
+                <div className="form-grid">
+                  <div className="form-group span-2">
+                    <label>Product Name (Required)</label>
                     <input
-                      type="checkbox"
-                      checked={prodInStock}
-                      onChange={(e) => setProdInStock(e.target.checked)}
+                      type="text"
+                      required
+                      placeholder="e.g. Lavender Zari Work Khadi Angrakha Kurti"
+                      value={prodName}
+                      onChange={(e) => setProdName(e.target.value)}
                     />
-                    <span>In Stock (Available for Cart)</span>
-                  </label>
-                </div>
-              </div>
+                  </div>
 
-              {/* Photo links */}
-              <div className="form-images-section">
-                <h4>🖼️ Product Images (Paste Image URLs)</h4>
-                <p className="helper-text">Add up to 4 photo URLs (You can host images on Imgur, Postimages, or any cloud, then paste the direct links here).</p>
-                
-                <div className="images-grid">
-                  {prodImages.map((imgUrl, idx) => (
-                    <div key={idx} className="image-url-input-block">
-                      <label>Photo {idx + 1} URL {idx === 0 ? "(Primary)" : ""}</label>
-                      <div className="url-input-wrap">
-                        <input
-                          type="text"
-                          placeholder="https://example.com/image.jpg"
-                          value={imgUrl}
-                          onChange={(e) => updateImageIndex(idx, e.target.value)}
-                        />
-                        {imgUrl && (
-                          <div className="url-preview-thumb">
-                            <img 
-                              src={imgUrl} 
-                              alt="preview" 
-                              onError={(e) => { 
-                                e.currentTarget.onerror = null; 
-                                e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"; 
-                              }} 
-                            />
-                          </div>
-                        )}
+                  <div className="form-group">
+                    <label>Sale Price / Rate (₹) *</label>
+                    <input
+                      type="number"
+                      required
+                      min="1"
+                      placeholder="e.g. 599"
+                      value={prodPrice}
+                      onChange={(e) => setProdPrice(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Original / MRP (₹) *</label>
+                    <input
+                      type="number"
+                      required
+                      min="1"
+                      placeholder="e.g. 1199"
+                      value={prodOriginalPrice}
+                      onChange={(e) => setProdOriginalPrice(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Stock Quantity</label>
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="e.g. 50"
+                      value={prodStockQty}
+                      onChange={(e) => {
+                        setProdStockQty(e.target.value);
+                        // Auto mark out of stock when qty = 0
+                        if (Number(e.target.value) === 0) setProdInStock(false);
+                        else if (Number(e.target.value) > 0 && !prodInStock) setProdInStock(true);
+                      }}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Category</label>
+                    <select 
+                      value={prodCategory} 
+                      onChange={(e) => setProdCategory(e.target.value as "Women" | "Men")}
+                    >
+                      <option value="Women">Women's Kurtis</option>
+                      <option value="Men">Men's Kurta / Ethnic</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Discount %</label>
+                    <input
+                      type="text"
+                      readOnly
+                      value={
+                        prodPrice && prodOriginalPrice && Number(prodOriginalPrice) > Number(prodPrice)
+                          ? `${Math.round(((Number(prodOriginalPrice) - Number(prodPrice)) / Number(prodOriginalPrice)) * 100)}% OFF (auto)`
+                          : "0% (auto)"
+                      }
+                      style={{ background: "#f8fafc", color: "#888", cursor: "default" }}
+                    />
+                  </div>
+
+                  <div className="form-group checkbox-group">
+                    <label className="switch-label">
+                      <input
+                        type="checkbox"
+                        checked={prodInStock}
+                        onChange={(e) => {
+                          setProdInStock(e.target.checked);
+                          if (!e.target.checked && Number(prodStockQty) > 0) setProdStockQty("0");
+                        }}
+                      />
+                      <span style={{ color: prodInStock ? "#2f7a4f" : "#c0392b", fontWeight: 700 }}>
+                        {prodInStock ? "✅ In Stock" : "❌ Out of Stock"}
+                      </span>
+                    </label>
+                    {Number(prodStockQty) === 0 && (
+                      <p style={{ fontSize: 11, color: "#c0392b", marginTop: 4 }}>Qty is 0 → auto marked Out of Stock</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Photo links */}
+                <div className="form-images-section">
+                  <h4>🖼️ Product Images (Paste Image URLs)</h4>
+                  <p className="helper-text">Add up to 4 photo URLs (host on Imgur, Postimages, or any cloud — paste direct link).</p>
+                  
+                  <div className="images-grid">
+                    {prodImages.map((imgUrl, idx) => (
+                      <div key={idx} className="image-url-input-block">
+                        <label>Photo {idx + 1} {idx === 0 ? "(Primary)" : ""}</label>
+                        <div className="url-input-wrap">
+                          <input
+                            type="text"
+                            placeholder="https://example.com/image.jpg"
+                            value={imgUrl}
+                            onChange={(e) => updateImageIndex(idx, e.target.value)}
+                          />
+                          {imgUrl && (
+                            <div className="url-preview-thumb">
+                              <img 
+                                src={imgUrl} 
+                                alt="preview" 
+                                onError={(e) => { 
+                                  e.currentTarget.onerror = null; 
+                                  e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"; 
+                                }} 
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              <div className="form-actions-row">
-                <button type="button" className="admin-cancel-btn" onClick={resetProductForm}>
-                  Cancel
-                </button>
-                <button type="submit" className="admin-save-btn" disabled={actionLoading}>
-                  {actionLoading ? "Saving..." : editingProductId ? "Update Product" : "Publish Product"}
-                </button>
-              </div>
-            </form>
+                <div className="form-actions-row">
+                  <button type="button" className="admin-cancel-btn" onClick={resetProductForm}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="admin-save-btn" disabled={actionLoading}>
+                    {actionLoading ? "Saving..." : editingProductId ? "💾 Update Product" : "🚀 Publish Product"}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
 
@@ -661,7 +710,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                 />
               </div>
 
-              <button className="admin-store-btn" onClick={() => setShowProductForm(true)}>
+              <button className="admin-store-btn" onClick={() => { setEditingProductId(null); setShowProductForm(true); }}>
                 <FiPlus size={16} /> Add New Product
               </button>
             </div>
@@ -681,10 +730,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                         <th>Image</th>
                         <th>Product Name</th>
                         <th>Category</th>
-                        <th>Rate (Price)</th>
-                        <th>Original Price</th>
+                        <th>Rate (₹)</th>
+                        <th>MRP (₹)</th>
                         <th>Discount</th>
-                        <th>Stock</th>
+                        <th>Qty</th>
+                        <th>Stock Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -712,9 +762,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                             <td className="price-bold">₹{p.price}</td>
                             <td className="price-struck">₹{p.originalPrice}</td>
                             <td className="discount-tag">{p.discount}% OFF</td>
+                            <td className="stock-qty-cell">
+                              {p.stockQuantity !== undefined ? p.stockQuantity : "—"}
+                            </td>
                             <td>
                               <span className={`stock-badge ${p.inStock ? "in" : "out"}`}>
-                                {p.inStock ? "In Stock" : "Out of Stock"}
+                                {p.inStock ? "✅ In Stock" : "❌ Out of Stock"}
                               </span>
                             </td>
                             <td>
