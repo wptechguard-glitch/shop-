@@ -366,10 +366,11 @@ const App: React.FC = () => {
           <CategoryShowcase onNavigate={setPage} />
         </ScrollReveal>
 
+        {/* Women's Collection */}
         <ScrollReveal delay={150}>
-          <SectionHeader title="Trending Kurtis" onViewAll={() => setPage("category")} />
+          <SectionHeader title="Women's Collection" onViewAll={() => setPage("category")} />
           <div className="product-grid">
-            {productsList.slice(0, 10).map((p) => (
+            {productsList.filter(p => p.category === "Women").slice(0, 8).map((p) => (
               <ProductCard
                 key={p.id}
                 product={p}
@@ -379,6 +380,46 @@ const App: React.FC = () => {
                 onNavigate={setPage}
               />
             ))}
+            {/* Fallback if no Women category products yet */}
+            {productsList.filter(p => p.category === "Women").length === 0 &&
+              productsList.slice(0, 8).map((p) => (
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  onAddToCart={addToCart}
+                  onToggleWishlist={toggleWishlist}
+                  isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
+                  onNavigate={setPage}
+                />
+              ))
+            }
+          </div>
+        </ScrollReveal>
+
+        {/* Men's Collection */}
+        <ScrollReveal delay={180}>
+          <SectionHeader title="Men's Collection" onViewAll={() => setPage("category")} />
+          <div className="product-grid">
+            {productsList.filter(p => p.category === "Men").slice(0, 8).map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                onAddToCart={addToCart}
+                onToggleWishlist={toggleWishlist}
+                isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
+                onNavigate={setPage}
+              />
+            ))}
+            {productsList.filter(p => p.category === "Men").length === 0 && (
+              <div className="men-coming-soon-card">
+                <div className="men-cs-inner">
+                  <span className="men-cs-label">Men's Collection</span>
+                  <h3>Coming Soon</h3>
+                  <p>Premium kurtas, Nehru jackets, and sherwanis launching soon. Add products from Admin Panel with category "Men" to show them here.</p>
+                  <button className="men-cs-btn" onClick={() => setPage("category")}>Browse All Products</button>
+                </div>
+              </div>
+            )}
           </div>
         </ScrollReveal>
 

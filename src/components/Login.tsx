@@ -53,7 +53,7 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
     <div className="auth-split">
       <div className="auth-brand-panel">
         <div className="auth-brand-decor" />
-        <span className="brand-badge">✨ TRADITIONAL WEAR</span>
+        <span className="brand-badge">TRADITIONAL WEAR</span>
         <h1>
           Welcome to<br />
           <span>ShopKart</span>

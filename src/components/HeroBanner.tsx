@@ -4,14 +4,33 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 interface Slide {
   title: string;
   subtitle: string;
+  tag: string;
   image: string;
   buttonText: string;
 }
 
 const slides: Slide[] = [
-  { title: "Elegant Kurti Collection", subtitle: "STARTING FROM ₹399", image: "/images/kurti-maroon.jpg", buttonText: "Shop Now" },
-  { title: "New Arrivals This Week", subtitle: "UPTO 50% OFF", image: "/images/kurti-peach.jpg", buttonText: "Explore" },
-  { title: "Party Wear Special", subtitle: "DESIGNER PICKS", image: "/images/kurti-blue.jpg", buttonText: "View Collection" },
+  {
+    title: "Women's Ethnic Collection",
+    subtitle: "Handcrafted kurtis and anarkalis starting from",
+    tag: "FROM ₹399",
+    image: "/images/kurti-maroon.jpg",
+    buttonText: "Shop Women's",
+  },
+  {
+    title: "Men's Kurta Collection",
+    subtitle: "Premium cotton kurtas and Nehru jackets",
+    tag: "UPTO 40% OFF",
+    image: "/images/kurti-blue.jpg",
+    buttonText: "Shop Men's",
+  },
+  {
+    title: "Festive Season Special",
+    subtitle: "Designer picks for weddings and celebrations",
+    tag: "EXCLUSIVE DESIGNS",
+    image: "/images/kurti-peach.jpg",
+    buttonText: "View Collection",
+  },
 ];
 
 const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) => {
@@ -20,7 +39,7 @@ const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNaviga
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 4000);
+    }, 4500);
     return () => clearInterval(timer);
   }, []);
 
@@ -37,6 +56,7 @@ const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNaviga
         >
           <div className="hero-overlay" />
           <div className="hero-content">
+            <span className="hero-tag-pill">{slide.tag}</span>
             <h1>{slide.title}</h1>
             <p>{slide.subtitle}</p>
             <button onClick={() => onNavigate("category")}>{slide.buttonText}</button>

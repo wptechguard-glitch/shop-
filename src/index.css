@@ -71,8 +71,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 24px;
+  padding: 14px 32px;
   gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .store-name {
@@ -444,6 +447,13 @@ body {
   color: #1f1b1a;
 }
 
+.section-subtitle {
+  font-size: 14px;
+  color: #7a7371;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
 .view-all-link {
   display: flex;
   align-items: center;
@@ -455,8 +465,252 @@ body {
 }
 
 /* ============================================================
-   CATEGORY SHOWCASE (home page cards)
+   GENDER SHOWCASE (home page Men's / Women's two-column layout)
    ============================================================ */
+.gender-showcase-section {
+  padding-top: 12px;
+}
+
+.gender-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.gender-showcase-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.gender-showcase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18);
+}
+
+.gender-showcase-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  transition: transform 0.5s ease;
+}
+
+.gender-showcase-card:hover .gender-showcase-bg {
+  transform: scale(1.05);
+}
+
+.gender-showcase-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 15, 40, 0.82) 0%, rgba(10, 15, 40, 0.25) 55%, transparent 100%);
+}
+
+.gender-showcase-content {
+  position: relative;
+  z-index: 2;
+  padding: 32px 28px;
+  color: white;
+  width: 100%;
+}
+
+.gender-showcase-tag {
+  display: inline-block;
+  background: #c9a24b;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.gender-showcase-content h3 {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.gender-showcase-content p {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 18px;
+}
+
+.gender-showcase-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+
+.gender-showcase-btn:hover {
+  background: white;
+  color: #14213d;
+  border-color: white;
+}
+
+/* Sub category chips below the gender showcase */
+.sub-category-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.sub-cat-chip {
+  background: white;
+  border: 1.5px solid #e0dbd7;
+  color: #1f1b1a;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sub-cat-chip:hover {
+  background: #14213d;
+  color: white;
+  border-color: #14213d;
+}
+
+/* ============================================================
+   HERO TAG PILL
+   ============================================================ */
+.hero-tag-pill {
+  display: inline-block;
+  background: #c9a24b;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+/* ============================================================
+   MEN'S COMING SOON CARD
+   ============================================================ */
+.men-coming-soon-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #14213d 0%, #0d1526 60%, #1a2f52 100%);
+  border-radius: 18px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.men-cs-inner {
+  text-align: center;
+  color: white;
+  max-width: 500px;
+}
+
+.men-cs-label {
+  display: inline-block;
+  background: #c9a24b;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.men-cs-inner h3 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.men-cs-inner p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.men-cs-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  color: white;
+  padding: 10px 28px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.men-cs-btn:hover {
+  background: white;
+  color: #14213d;
+}
+
+/* ============================================================
+   BRAND PROMISES ROW (replaces stat numbers)
+   ============================================================ */
+.brand-promises-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.brand-promise-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.brand-promise-icon {
+  color: #c9a24b;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.brand-promise-item h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #14213d;
+  margin-bottom: 2px;
+}
+
+.brand-promise-item p {
+  font-size: 13px;
+  color: #7a7371;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Keep category-showcase-card class for backward compat */
 .category-showcase-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -495,6 +749,7 @@ body {
   font-weight: 600;
   font-size: 14px;
 }
+
 
 /* ============================================================
    CATEGORY PAGE CHIPS (category filter tabs)
@@ -2449,6 +2704,33 @@ body {
   }
   .checkout-step-line {
     width: 20px;
+  }
+
+  /* Gender showcase — stack on mobile */
+  .gender-showcase-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .gender-showcase-card {
+    min-height: 300px;
+  }
+  .gender-showcase-content h3 {
+    font-size: 28px;
+  }
+  .men-coming-soon-card {
+    padding: 28px 20px;
+  }
+  .men-cs-inner h3 {
+    font-size: 24px;
+  }
+  .brand-promises-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .brand-promise-item {
+    flex: 1;
+    min-width: 120px;
   }
 }
 

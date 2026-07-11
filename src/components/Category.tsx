@@ -52,7 +52,7 @@ const Category: React.FC<CategoryProps> = ({ products, onAddToCart, onToggleWish
         ))}
         <div className="category-hero-overlay" />
         <div className="category-hero-content">
-          <span className="category-hero-badge">✨ Curated Collection</span>
+          <span className="category-hero-badge">Curated Collection</span>
           <h1>The Ethnic Wear Edit</h1>
           <p>
             Handpicked kurtis, sarees and suits crafted with premium fabrics
@@ -78,16 +78,16 @@ const Category: React.FC<CategoryProps> = ({ products, onAddToCart, onToggleWish
           <p>Premium Fabric</p>
         </div>
         <div className="category-stat">
-          <h3>50K+</h3>
-          <p>Happy Customers</p>
-        </div>
-        <div className="category-stat">
-          <h3>4.8★</h3>
+          <h3>4.8 Star</h3>
           <p>Average Rating</p>
         </div>
         <div className="category-stat">
           <h3>7-Day</h3>
           <p>Easy Returns</p>
+        </div>
+        <div className="category-stat">
+          <h3>Secure</h3>
+          <p>Payment</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ const Category: React.FC<CategoryProps> = ({ products, onAddToCart, onToggleWish
 
       {gender === "Men" && (
         <div className="coming-soon-banner">
-          <span>👔 New arrivals launching soon — add these to your wishlist to get notified first!</span>
+          <span>New men's arrivals launching soon — add products with category "Men" from the Admin Panel to show them here.</span>
         </div>
       )}
 

@@ -254,7 +254,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       });
 
       if (res.ok) {
-        alert(isMongoId ? "✅ Product updated successfully!" : "✅ Product saved to database!");
+        alert(isMongoId ? "Product updated successfully!" : "Product saved to database!");
         resetProductForm();
         onRefreshProducts();
         fetchData(); // reload stats
@@ -278,7 +278,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     // Static products (numeric ID) are not in DB — nothing to delete on server
     const isMongoId = typeof prodId === "string" && /^[a-f\d]{24}$/i.test(prodId);
     if (!isMongoId) {
-      alert("ℹ️ This product is from the default list and is not stored in the database. Use 'Add New Product' to add your own products.");
+      alert("This product is from the default list and is not stored in the database. Use 'Add New Product' to add your own products.");
       return;
     }
 
@@ -289,7 +289,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       });
 
       if (res.ok) {
-        alert("✅ Product deleted successfully!");
+        alert("Product deleted successfully!");
         onRefreshProducts();
         fetchData();
       } else {
@@ -404,13 +404,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
             className={`admin-panel-tab-btn ${activeTab === "orders" ? "active" : ""}`}
             onClick={() => { setActiveTab("orders"); setSearch(""); }}
           >
-            📦 Orders
+            Orders
           </button>
           <button 
             className={`admin-panel-tab-btn ${activeTab === "products" ? "active" : ""}`}
             onClick={() => { setActiveTab("products"); setSearch(""); }}
           >
-            👗 Products
+            Products
           </button>
         </div>
 
@@ -435,7 +435,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
           <div className="admin-modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) resetProductForm(); }}>
             <div className="admin-modal-box">
               <div className="form-card-header">
-                <h3>{editingProductId ? "📝 Edit Product Details" : "✨ Add New Kurti / Product"}</h3>
+                <h3>{editingProductId ? "Edit Product Details" : "Add New Kurti / Product"}</h3>
                 <button className="form-close-btn" onClick={resetProductForm}><FiX size={18} /></button>
               </div>
 
@@ -548,7 +548,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                         }}
                       />
                       <span style={{ color: prodInStock ? "#2f7a4f" : "#c0392b", fontWeight: 700 }}>
-                        {prodInStock ? "✅ In Stock" : "❌ Out of Stock"}
+                        {prodInStock ? "In Stock" : "Out of Stock"}
                       </span>
                     </label>
                     {Object.values(prodSizes).reduce((sum, v) => sum + v, 0) === 0 && (
@@ -559,7 +559,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
 
                 {/* Photo links */}
                 <div className="form-images-section">
-                  <h4>🖼️ Product Images (Paste Image URLs)</h4>
+                  <h4>Product Images (Paste Image URLs)</h4>
                   <p className="helper-text">Add up to 4 photo URLs (host on Imgur, Postimages, or any cloud — paste direct link).</p>
                   
                   <div className="images-grid">
@@ -596,7 +596,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                     Cancel
                   </button>
                   <button type="submit" className="admin-save-btn" disabled={actionLoading}>
-                    {actionLoading ? "Saving..." : editingProductId ? "💾 Update Product" : "🚀 Publish Product"}
+                    {actionLoading ? "Saving..." : editingProductId ? "Update Product" : "Publish Product"}
                   </button>
                 </div>
               </form>
@@ -697,7 +697,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                           <div className="admin-order-detail">
                             <div className="admin-order-cols">
                               <div className="admin-detail-section">
-                                <h5>🛍️ Items</h5>
+                                <h5>Items</h5>
                                 {order.items.map((item) => (
                                   <div key={item.id} className="admin-item-row">
                                     <span>{item.name} × {item.qty}</span>
@@ -711,7 +711,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                               </div>
 
                               <div className="admin-detail-section">
-                                <h5>📍 Delivery Address</h5>
+                                <h5>Delivery Address</h5>
                                 <p className="admin-addr-name">{order.address.fullName}</p>
                                 <p>{order.address.addressLine}</p>
                                 <p>{order.address.city}, {order.address.state} — {order.address.pincode}</p>
@@ -720,7 +720,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                             </div>
 
                             <div className="admin-status-update">
-                              <h5>🔄 Update Order Status</h5>
+                              <h5>Update Order Status</h5>
                               <div className="admin-status-btns">
                                 {(["Processing", "Shipped", "Delivered"] as const).map((s) => {
                                   const cfg = statusConfig[s];
