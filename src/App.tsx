@@ -20,9 +20,7 @@ import HeroBanner from "./components/HeroBanner";
 import FeaturesRow from "./components/FeaturesRow";
 import CategoryShowcase from "./components/CategoryShowcase";
 import SectionHeader from "./components/SectionHeader";
-import ScrollReveal from "./components/ScrollReveal";
 import { API_BASE_URL } from "./api";
-import { BrandStory, Lookbook, Testimonials, InstagramFeed, Newsletter } from "./components/HomeExtras";
 
 export interface OrderItem {
   id: string | number;
@@ -355,22 +353,21 @@ const App: React.FC = () => {
     }
 
     return (
-      <>
+      <div className="home-page">
         <HeroBanner onNavigate={setPage} />
 
-        <ScrollReveal>
-          <FeaturesRow />
-        </ScrollReveal>
+        <FeaturesRow />
 
-        <ScrollReveal delay={100}>
-          <CategoryShowcase onNavigate={setPage} />
-        </ScrollReveal>
+        <CategoryShowcase onNavigate={setPage} />
 
         {/* Women's Collection */}
-        <ScrollReveal delay={150}>
+        <section className="home-section">
           <SectionHeader title="Women's Collection" onViewAll={() => setPage("category")} />
           <div className="product-grid">
-            {productsList.filter(p => p.category === "Women").slice(0, 8).map((p) => (
+            {(productsList.filter(p => p.category === "Women").length > 0
+              ? productsList.filter(p => p.category === "Women")
+              : productsList
+            ).slice(0, 8).map((p) => (
               <ProductCard
                 key={p.id}
                 product={p}
@@ -380,67 +377,48 @@ const App: React.FC = () => {
                 onNavigate={setPage}
               />
             ))}
-            {/* Fallback if no Women category products yet */}
-            {productsList.filter(p => p.category === "Women").length === 0 &&
-              productsList.slice(0, 8).map((p) => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  onAddToCart={addToCart}
-                  onToggleWishlist={toggleWishlist}
-                  isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
-                  onNavigate={setPage}
-                />
-              ))
-            }
           </div>
-        </ScrollReveal>
+        </section>
 
         {/* Men's Collection */}
-        <ScrollReveal delay={180}>
+        <section className="home-section">
           <SectionHeader title="Men's Collection" onViewAll={() => setPage("category")} />
           <div className="product-grid">
-            {productsList.filter(p => p.category === "Men").slice(0, 8).map((p) => (
-              <ProductCard
-                key={p.id}
-                product={p}
-                onAddToCart={addToCart}
-                onToggleWishlist={toggleWishlist}
-                isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
-                onNavigate={setPage}
-              />
-            ))}
-            {productsList.filter(p => p.category === "Men").length === 0 && (
-              <div className="men-coming-soon-card">
-                <div className="men-cs-inner">
-                  <span className="men-cs-label">Men's Collection</span>
-                  <h3>Coming Soon</h3>
-                  <p>Premium kurtas, Nehru jackets, and sherwanis launching soon. Add products from Admin Panel with category "Men" to show them here.</p>
-                  <button className="men-cs-btn" onClick={() => setPage("category")}>Browse All Products</button>
+            {productsList.filter(p => p.category === "Men").length > 0
+              ? productsList.filter(p => p.category === "Men").slice(0, 8).map((p) => (
+                  <ProductCard
+                    key={p.id}
+                    product={p}
+                    onAddToCart={addToCart}
+                    onToggleWishlist={toggleWishlist}
+                    isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
+                    onNavigate={setPage}
+                  />
+                ))
+              : (
+                <div className="empty-gender-card" onClick={() => setPage("category")}>
+                  <div className="egc-inner">
+                    <span className="egc-label">Men's Collection</span>
+                    <h3>Coming Soon</h3>
+                    <p>Add products with category "Men" from the Admin Panel to display them here.</p>
+                    <button className="egc-btn">Browse All Products</button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            }
           </div>
-        </ScrollReveal>
+        </section>
 
-        <ScrollReveal delay={200}>
-          <BrandStory />
-        </ScrollReveal>
-
-        <ScrollReveal delay={250}>
-          <Lookbook />
-        </ScrollReveal>
-
-        <ScrollReveal delay={300}>
-          <Testimonials />
-        </ScrollReveal>
-
-        <ScrollReveal delay={350}>
-          <InstagramFeed />
-        </ScrollReveal>
-
-        <Newsletter />
-      </>
+        {/* Deals Banner */}
+        <div className="deals-strip" onClick={() => setPage("category")}>
+          <div className="deals-strip-inner">
+            <span className="deals-strip-tag">Limited Time</span>
+            <h3>Seasonal Offers — Up to 40% Off</h3>
+            <p>On select ethnic wear collections. Valid while stock lasts.</p>
+            <button className="deals-strip-btn">Shop Deals</button>
+          </div>
+        </div>
+      </div>
     );
   };
 
