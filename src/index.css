@@ -541,9 +541,22 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 24px 10px;
+  padding: 32px 24px 12px;
   max-width: 1300px;
   margin: 0 auto;
+}
+
+/* When inside .home-section the container already handles max-width/padding */
+.home-section .section-header-row {
+  padding: 28px 0 12px;
+  max-width: none;
+  margin: 0;
+}
+
+.home-section .product-grid {
+  padding: 0;
+  max-width: none;
+  margin: 0;
 }
 
 .section-title {
@@ -844,6 +857,7 @@ body {
   transform: scale(1.08);
 }
 
+
 .category-showcase-label {
   position: absolute;
   bottom: 0;
@@ -855,6 +869,305 @@ body {
   font-weight: 600;
   font-size: 14px;
 }
+
+/* ============================================================
+   CATEGORY SHOWCASE V2 (new gender cards)
+   ============================================================ */
+.cat-showcase-section {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 36px 24px 24px;
+}
+
+.cat-gender-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.cat-gender-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  height: 380px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cat-gender-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.16);
+}
+
+.cat-gender-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  transition: transform 0.5s ease;
+}
+
+.cat-gender-card:hover .cat-gender-bg {
+  transform: scale(1.04);
+}
+
+.cat-gender-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(8, 14, 35, 0.85) 0%,
+    rgba(8, 14, 35, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+.cat-gender-info {
+  position: relative;
+  z-index: 2;
+  padding: 28px 24px;
+  color: white;
+  width: 100%;
+}
+
+.cat-gender-info h3 {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.cat-gender-info p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 16px;
+}
+
+.cat-gender-cta {
+  display: inline-block;
+  background: #c9a24b;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  transition: background 0.2s ease;
+}
+
+.cat-gender-card:hover .cat-gender-cta {
+  background: #b8912e;
+}
+
+.cat-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cat-quick-chip {
+  background: white;
+  border: 1.5px solid #e2ddd9;
+  color: #3a3532;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.cat-quick-chip:hover {
+  background: #14213d;
+  color: white;
+  border-color: #14213d;
+}
+
+/* ============================================================
+   HOME PAGE LAYOUT
+   ============================================================ */
+.home-page {
+  background: #f7f8fa;
+}
+
+.home-section {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px 16px;
+}
+
+/* ============================================================
+   EMPTY GENDER CARD (men's coming soon placeholder)
+   ============================================================ */
+.empty-gender-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #14213d, #0d1526);
+  border-radius: 14px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.empty-gender-card:hover {
+  opacity: 0.92;
+}
+
+.egc-inner {
+  text-align: center;
+  color: white;
+  padding: 40px 24px;
+  max-width: 480px;
+}
+
+.egc-label {
+  display: inline-block;
+  background: #c9a24b;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.egc-inner h3 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.egc-inner p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.egc-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  color: white;
+  padding: 9px 24px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.egc-btn:hover {
+  background: white;
+  color: #14213d;
+}
+
+/* ============================================================
+   DEALS STRIP
+   ============================================================ */
+.deals-strip {
+  background: linear-gradient(100deg, #14213d 0%, #0d1a38 50%, #1a3060 100%);
+  cursor: pointer;
+  margin: 16px 0 0;
+  padding: 50px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+.deals-strip::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(201, 162, 75, 0.09);
+  pointer-events: none;
+}
+
+.deals-strip::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  left: -40px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(201, 162, 75, 0.06);
+  pointer-events: none;
+}
+
+.deals-strip:hover {
+  opacity: 0.95;
+}
+
+.deals-strip-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.deals-strip-tag {
+  display: inline-block;
+  background: #c9a24b;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.deals-strip-inner h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+  font-family: Georgia, serif;
+  letter-spacing: -0.3px;
+}
+
+.deals-strip-inner p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.deals-strip-btn {
+  background: #c9a24b;
+  color: white;
+  border: none;
+  padding: 13px 34px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.4px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.deals-strip-btn:hover {
+  background: #b8912e;
+  transform: translateY(-2px);
+}
+
 
 
 /* ============================================================
@@ -1068,7 +1381,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  padding: 24px;
+  padding: 16px 24px 32px;
   max-width: 1300px;
   margin: 0 auto;
 }
