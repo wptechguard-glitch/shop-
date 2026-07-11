@@ -469,7 +469,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                         />
                         {imgUrl && (
                           <div className="url-preview-thumb">
-                            <img src={imgUrl} alt="preview" onError={(e) => { (e.target as HTMLImageElement).src="https://via.placeholder.com/80x100?text=Error" }} />
+                            <img 
+                              src={imgUrl} 
+                              alt="preview" 
+                              onError={(e) => { 
+                                e.currentTarget.onerror = null; 
+                                e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"; 
+                              }} 
+                            />
                           </div>
                         )}
                       </div>
@@ -688,10 +695,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                           <tr key={String(dbId)}>
                             <td>
                               <img 
-                                src={p.images[0] || "https://via.placeholder.com/80x100?text=Kurti"} 
+                                src={p.images[0] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"} 
                                 alt={p.name}
                                 className="admin-prod-thumb"
-                                onError={(e) => { (e.target as HTMLImageElement).src="https://via.placeholder.com/80x100?text=Error" }}
+                                onError={(e) => { 
+                                  e.currentTarget.onerror = null; 
+                                  e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"; 
+                                }}
                               />
                             </td>
                             <td className="prod-cell-name">

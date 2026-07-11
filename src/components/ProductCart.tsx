@@ -35,9 +35,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         <img
-          src={product.images[activeImg] || "https://via.placeholder.com/300x380?text=ShopKart"}
+          src={product.images[activeImg] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=300&q=80"}
           alt={product.name}
           className={`product-image ${outOfStock ? "dimmed" : ""}`}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=300&q=80";
+          }}
         />
 
         <button

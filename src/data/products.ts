@@ -9,6 +9,7 @@ export interface Product {
   images: string[]; // yahan apni photo ke path/URL daalna
   category: "Women" | "Men";
   inStock: boolean;
+  stockQuantity?: number;
 }
 
 export const products: Product[] = [

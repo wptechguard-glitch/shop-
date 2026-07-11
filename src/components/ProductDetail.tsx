@@ -50,8 +50,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         <div className="detail-gallery">
           <div className="detail-main-img">
             <img
-              src={product.images[activeImg] || "https://via.placeholder.com/500x600?text=Kurti"}
+              src={product.images[activeImg] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&q=80"}
               alt={product.name}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&q=80";
+              }}
             />
           </div>
           <div className="detail-thumb-row">
@@ -61,7 +65,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                 className={`detail-thumb ${activeImg === idx ? "active" : ""}`}
                 onClick={() => setActiveImg(idx)}
               >
-                <img src={img || "https://via.placeholder.com/100x120?text=Kurti"} alt="" />
+                <img 
+                  src={img || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=100&q=80"} 
+                  alt="" 
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=100&q=80";
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -138,7 +149,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
               product={p}
               onAddToCart={onAddToCart}
               onToggleWishlist={onToggleWishlist}
-              isWishlisted={wishlist.includes(p.id)}
+              isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
               onNavigate={onNavigate}
             />
           ))}
