@@ -15,7 +15,7 @@ import Wishlist from "./components/Wishlist";
 import CartPage from "./components/CartPage";
 import ProductCard from "./components/ProductCart";
 import ProductDetail from "./components/ProductDetail";
-import { products } from "./data/products";
+import { products, type Product } from "./data/products";
 import HeroBanner from "./components/HeroBanner";
 import FeaturesRow from "./components/FeaturesRow";
 import CategoryShowcase from "./components/CategoryShowcase";
@@ -24,7 +24,7 @@ import ScrollReveal from "./components/ScrollReveal";
 import { API_BASE_URL } from "./api";
 
 export interface OrderItem {
-  id: number;
+  id: string | number;
   name: string;
   price: number;
   qty: number;
@@ -70,14 +70,46 @@ const App: React.FC = () => {
     window.addEventListener("popstate", handlePop);
     return () => window.removeEventListener("popstate", handlePop);
   }, []);
-  const [cart, setCart] = useState<Record<number, number>>({});
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [cart, setCart] = useState<Record<string | number, number>>({});
+  const [wishlist, setWishlist] = useState<(string | number)[]>([]);
+  const [productsList, setProductsList] = useState<Product[]>(products);
   const [orders, setOrders] = useState<Order[]>([]);
   const [pendingAddress, setPendingAddress] = useState<Address | null>(null);
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
 
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
+
+  // Fetch all products from backend
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/products`);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((p: any) => ({
+            id: p._id,
+            _id: p._id,
+            name: p.name,
+            price: p.price,
+            originalPrice: p.originalPrice,
+            discount: p.discount,
+            rating: p.rating || 4.0,
+            images: p.images && p.images.length > 0 ? p.images : ["", "", "", ""],
+            category: p.category,
+            inStock: p.inStock
+          }));
+          setProductsList(mapped);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch products from backend:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // Check localStorage on app load — keeps user logged in after refresh
   useEffect(() => {
@@ -139,13 +171,13 @@ const App: React.FC = () => {
     setPage("home");
   };
 
-  const addToCart = (id: number) =>
+  const addToCart = (id: string | number) =>
     setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
 
-  const incrementCart = (id: number) =>
+  const incrementCart = (id: string | number) =>
     setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
 
-  const decrementCart = (id: number) =>
+  const decrementCart = (id: string | number) =>
     setCart((prev) => {
       const qty = (prev[id] || 0) - 1;
       const updated = { ...prev };
@@ -154,20 +186,20 @@ const App: React.FC = () => {
       return updated;
     });
 
-  const removeFromCart = (id: number) =>
+  const removeFromCart = (id: string | number) =>
     setCart((prev) => {
       const updated = { ...prev };
       delete updated[id];
       return updated;
     });
 
-  const toggleWishlist = (id: number) =>
+  const toggleWishlist = (id: string | number) =>
     setWishlist((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const cartCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
 
   const cartTotal = Object.entries(cart).reduce((sum, [id, qty]) => {
-    const p = products.find((prod) => prod.id === Number(id));
+    const p = productsList.find((prod) => String(prod.id) === String(id));
     return sum + (p ? p.price * qty : 0);
   }, 0);
 
@@ -179,7 +211,7 @@ const App: React.FC = () => {
     if (!pendingAddress) return;
 
     const orderItems = Object.entries(cart).map(([id, qty]) => {
-      const p = products.find((prod) => prod.id === Number(id))!;
+      const p = productsList.find((prod) => String(prod.id) === String(id))!;
       return { id: p.id, name: p.name, price: p.price, qty };
     });
 
@@ -274,11 +306,12 @@ const App: React.FC = () => {
     }
 
     if (page === "admin")
-      return <AdminPanel onNavigate={setPage} />;
+      return <AdminPanel onNavigate={setPage} products={productsList} onRefreshProducts={fetchProducts} />;
 
     if (page === "category")
       return (
         <Category
+          products={productsList}
           onAddToCart={addToCart}
           onToggleWishlist={toggleWishlist}
           wishlist={wishlist}
@@ -288,6 +321,7 @@ const App: React.FC = () => {
     if (page === "wishlist")
       return (
         <Wishlist
+          products={productsList}
           wishlist={wishlist}
           onAddToCart={addToCart}
           onToggleWishlist={toggleWishlist}
@@ -297,6 +331,7 @@ const App: React.FC = () => {
     if (page === "cart")
       return (
         <CartPage
+          products={productsList}
           cart={cart}
           onIncrement={incrementCart}
           onDecrement={decrementCart}
@@ -305,10 +340,11 @@ const App: React.FC = () => {
         />
       );
     if (page.startsWith("product:")) {
-      const id = Number(page.split(":")[1]);
+      const id = page.split(":")[1];
       return (
         <ProductDetail
           productId={id}
+          products={productsList}
           onAddToCart={addToCart}
           onToggleWishlist={toggleWishlist}
           wishlist={wishlist}
@@ -332,13 +368,13 @@ const App: React.FC = () => {
         <ScrollReveal delay={150}>
           <SectionHeader title="Trending Kurtis" onViewAll={() => setPage("category")} />
           <div className="product-grid">
-            {products.slice(0, 10).map((p) => (
+            {productsList.slice(0, 10).map((p) => (
               <ProductCard
                 key={p.id}
                 product={p}
                 onAddToCart={addToCart}
                 onToggleWishlist={toggleWishlist}
-                isWishlisted={wishlist.includes(p.id)}
+                isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
                 onNavigate={setPage}
               />
             ))}
@@ -350,7 +386,7 @@ const App: React.FC = () => {
 
   // Admin page — no navbar/footer chrome
   if (page === "admin") {
-    return <AdminPanel onNavigate={setPage} />;
+    return <AdminPanel onNavigate={setPage} products={productsList} onRefreshProducts={fetchProducts} />;
   }
 
   return (

@@ -1,17 +1,18 @@
 import React from "react";
 import { FiHeart } from "react-icons/fi";
 import ProductCard from "./ProductCart";
-import { products } from "../data/products";
+import type { Product } from "../data/products";
 
 interface WishlistProps {
-  wishlist: number[];
-  onAddToCart: (id: number) => void;
-  onToggleWishlist: (id: number) => void;
+  products: Product[];
+  wishlist: (string | number)[];
+  onAddToCart: (id: string | number) => void;
+  onToggleWishlist: (id: string | number) => void;
   onNavigate: (page: string) => void;
 }
 
-const Wishlist: React.FC<WishlistProps> = ({ wishlist, onAddToCart, onToggleWishlist, onNavigate }) => {
-  const items = products.filter((p) => wishlist.includes(p.id));
+const Wishlist: React.FC<WishlistProps> = ({ products, wishlist, onAddToCart, onToggleWishlist, onNavigate }) => {
+  const items = products.filter((p) => wishlist.some((x) => String(x) === String(p.id)));
 
   if (items.length === 0) {
     return (

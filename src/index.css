@@ -3160,3 +3160,407 @@ body {
   .admin-status-btns { flex-direction: column; }
   .admin-status-action-btn { width: 100%; justify-content: center; }
 }
+
+/* ── Admin Tab Switcher ────────────────────── */
+.admin-tab-switcher {
+  display: flex;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 0 10px;
+}
+
+.admin-panel-tab-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.admin-panel-tab-btn:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-panel-tab-btn.active {
+  background: #c9a24b;
+  color: #0d1526;
+}
+
+/* ── Product Add/Edit Form Card ────────────── */
+.admin-product-form-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 28px;
+  border: 1px solid #eef2f9;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1.5px solid #f2f5fa;
+  padding-bottom: 14px;
+}
+
+.form-card-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #14213d;
+}
+
+.form-close-btn {
+  background: #f1f3f7;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+}
+.form-close-btn:hover { background: #e2e6ee; color: #111; }
+
+.admin-product-form .form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.admin-product-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-product-form .form-group.span-2 {
+  grid-column: span 2;
+}
+
+.admin-product-form label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.admin-product-form input[type="text"],
+.admin-product-form input[type="number"],
+.admin-product-form select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.admin-product-form input:focus,
+.admin-product-form select:focus {
+  border-color: #14213d;
+}
+
+.checkbox-group {
+  justify-content: center;
+}
+
+.switch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 14px;
+}
+
+.switch-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: #14213d;
+  cursor: pointer;
+}
+
+.switch-label span {
+  font-size: 13px;
+  color: #333;
+  text-transform: none;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* ── Image links section ─────────────────── */
+.form-images-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1.5px solid #f2f5fa;
+}
+
+.form-images-section h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #14213d;
+  margin-bottom: 4px;
+}
+
+.helper-text {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.image-url-input-block {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px dashed #e2e8f0;
+}
+
+.url-input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.url-input-wrap input {
+  flex: 1;
+  background: white;
+}
+
+.url-preview-thumb {
+  width: 44px;
+  height: 52px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  background: white;
+  flex-shrink: 0;
+}
+
+.url-preview-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-actions-row {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.admin-cancel-btn {
+  padding: 10px 24px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.admin-cancel-btn:hover { background: #e2e8f0; }
+
+.admin-save-btn {
+  padding: 10px 28px;
+  background: #14213d;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.admin-save-btn:hover { opacity: 0.9; }
+.admin-save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Inventory List Table ─────────────────── */
+.admin-inventory-list {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.admin-inventory-table th {
+  background: #f8fafc;
+  padding: 14px 18px;
+  font-weight: 700;
+  color: #475569;
+  border-bottom: 1.5px solid #e2e8f0;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.admin-inventory-table td {
+  padding: 12px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.admin-inventory-table tr:hover td {
+  background: #f8fafc;
+}
+
+.admin-prod-thumb {
+  width: 44px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.prod-cell-name {
+  max-width: 280px;
+}
+
+.prod-cell-name strong {
+  display: block;
+  font-size: 13.5px;
+  color: #0f172a;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prod-id-badge {
+  font-family: monospace;
+  font-size: 10px;
+  color: #94a3b8;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.category-tag {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.price-bold {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.price-struck {
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-size: 12px;
+}
+
+.discount-tag {
+  color: #dc2626;
+  font-weight: 700;
+  background: #fef2f2;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.stock-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stock-badge.in { background: #f0fdf4; color: #16a34a; }
+.stock-badge.out { background: #fef2f2; color: #dc2626; }
+
+.admin-actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.act-edit-btn,
+.act-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.act-edit-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.act-edit-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+.act-delete-btn {
+  background: #fff5f5;
+  color: #e11d48;
+  border-color: #fecdd3;
+}
+.act-delete-btn:hover { background: #ffe4e6; color: #9f1239; }
+
+/* Form Responsive */
+@media (max-width: 992px) {
+  .admin-product-form .form-grid { grid-template-columns: repeat(2, 1fr); }
+  .admin-product-form .form-group.span-2 { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+  .admin-tab-switcher { order: 3; width: 100%; margin: 8px 0 0; justify-content: center; }
+  .admin-product-form .form-grid { grid-template-columns: 1fr; }
+  .admin-product-form .form-group.span-2 { grid-column: span 1; }
+  .images-grid { grid-template-columns: 1fr; }
+}

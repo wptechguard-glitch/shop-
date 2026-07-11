@@ -5,8 +5,8 @@ import "../index.css";
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (id: number) => void;
-  onToggleWishlist: (id: number) => void;
+  onAddToCart: (id: string | number) => void;
+  onToggleWishlist: (id: string | number) => void;
   isWishlisted: boolean;
   onNavigate?: (page: string) => void;
 }

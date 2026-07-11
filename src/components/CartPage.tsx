@@ -1,22 +1,23 @@
 import React from "react";
 import { FiTrash2, FiPlus, FiMinus, FiShoppingBag } from "react-icons/fi";
-import { products } from "../data/products";
+import type { Product } from "../data/products";
 
 interface CartPageProps {
-  cart: Record<number, number>;
-  onIncrement: (id: number) => void;
-  onDecrement: (id: number) => void;
-  onRemove: (id: number) => void;
+  products: Product[];
+  cart: Record<string | number, number>;
+  onIncrement: (id: string | number) => void;
+  onDecrement: (id: string | number) => void;
+  onRemove: (id: string | number) => void;
   onNavigate: (page: string) => void;
 }
 
-const CartPage: React.FC<CartPageProps> = ({ cart, onIncrement, onDecrement, onRemove, onNavigate }) => {
+const CartPage: React.FC<CartPageProps> = ({ products, cart, onIncrement, onDecrement, onRemove, onNavigate }) => {
   const cartItems = Object.entries(cart)
     .map(([id, qty]) => {
-      const product = products.find((p) => p.id === Number(id));
+      const product = products.find((p) => String(p.id) === String(id));
       return product ? { ...product, qty } : null;
     })
-    .filter(Boolean) as (typeof products[0] & { qty: number })[];
+    .filter(Boolean) as (Product & { qty: number })[];
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
   const originalTotal = cartItems.reduce((sum, item) => sum + item.originalPrice * item.qty, 0);

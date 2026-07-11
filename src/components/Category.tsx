@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCart";
-import { products } from "../data/products";
+import type { Product } from "../data/products";
 
 interface CategoryProps {
-  onAddToCart: (id: number) => void;
-  onToggleWishlist: (id: number) => void;
-  wishlist: number[];
+  products: Product[];
+  onAddToCart: (id: string | number) => void;
+  onToggleWishlist: (id: string | number) => void;
+  wishlist: (string | number)[];
   onNavigate: (page: string) => void;
 }
 
@@ -20,7 +21,7 @@ const categoryList = [
 // Add your own 3 banner image URLs here
 const bannerImages = ["", "", ""];
 
-const Category: React.FC<CategoryProps> = ({ onAddToCart, onToggleWishlist, wishlist, onNavigate }) => {
+const Category: React.FC<CategoryProps> = ({ products, onAddToCart, onToggleWishlist, wishlist, onNavigate }) => {
   const [gender, setGender] = useState("Women");
   const [active, setActive] = useState("All");
   const [activeSlide, setActiveSlide] = useState(0);
@@ -34,7 +35,7 @@ const Category: React.FC<CategoryProps> = ({ onAddToCart, onToggleWishlist, wish
 
   const genderFiltered = products.filter((p) => p.category === gender);
   const filtered =
-    active === "All" ? genderFiltered : genderFiltered.filter((p) => p.name.includes(active));
+    active === "All" ? genderFiltered : genderFiltered.filter((p) => p.name.toLowerCase().includes(active.toLowerCase()));
 
   return (
     <div className="category-page">
@@ -141,7 +142,7 @@ const Category: React.FC<CategoryProps> = ({ onAddToCart, onToggleWishlist, wish
               product={p}
               onAddToCart={onAddToCart}
               onToggleWishlist={onToggleWishlist}
-              isWishlisted={wishlist.includes(p.id)}
+              isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
               onNavigate={onNavigate}
             />
           ))}

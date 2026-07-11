@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { FiHeart, FiShoppingCart, FiChevronLeft, FiTruck, FiRefreshCw, FiShield } from "react-icons/fi";
-import { products } from "../data/products";
+import type { Product } from "../data/products";
 import ProductCard from "./ProductCart";
 
 interface ProductDetailProps {
-  productId: number;
-  onAddToCart: (id: number) => void;
-  onToggleWishlist: (id: number) => void;
-  wishlist: number[];
+  productId: string | number;
+  products: Product[];
+  onAddToCart: (id: string | number) => void;
+  onToggleWishlist: (id: string | number) => void;
+  wishlist: (string | number)[];
   onNavigate: (page: string) => void;
 }
 
@@ -15,12 +16,13 @@ const sizes = ["S", "M", "L", "XL", "XXL"];
 
 const ProductDetail: React.FC<ProductDetailProps> = ({
   productId,
+  products,
   onAddToCart,
   onToggleWishlist,
   wishlist,
   onNavigate,
 }) => {
-  const product = products.find((p) => p.id === productId);
+  const product = products.find((p) => String(p.id) === String(productId));
   const [activeImg, setActiveImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState("M");
 
@@ -35,8 +37,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
     );
   }
 
-  const isWishlisted = wishlist.includes(product.id);
-  const related = products.filter((p) => p.id !== product.id).slice(0, 4);
+  const isWishlisted = wishlist.some((x) => String(x) === String(product.id));
+  const related = products.filter((p) => String(p.id) !== String(product.id)).slice(0, 4);
 
   return (
     <div className="product-detail-page">
