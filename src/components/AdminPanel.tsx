@@ -226,13 +226,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     };
 
     try {
+      // Check if id is a real MongoDB ObjectId (24-char hex string)
+      const isMongoId = editingProductId &&
+        typeof editingProductId === "string" &&
+        /^[a-f\d]{24}$/i.test(editingProductId);
+
       let url = `${API_BASE_URL}/products`;
       let method = "POST";
 
-      if (editingProductId) {
+      if (isMongoId) {
+        // Real DB product — update it
         url = `${API_BASE_URL}/products/${editingProductId}`;
         method = "PUT";
       }
+      // If numeric/static ID → always create new in MongoDB
 
       const res = await fetch(url, {
         method,
@@ -241,7 +248,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       });
 
       if (res.ok) {
-        alert(editingProductId ? "Product updated successfully!" : "Product created successfully!");
+        alert(isMongoId ? "✅ Product updated successfully!" : "✅ Product saved to database!");
         resetProductForm();
         onRefreshProducts();
         fetchData(); // reload stats
@@ -257,9 +264,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     }
   };
 
+
   // Delete product
   const handleDeleteProduct = async (prodId: string | number) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
+
+    // Static products (numeric ID) are not in DB — nothing to delete on server
+    const isMongoId = typeof prodId === "string" && /^[a-f\d]{24}$/i.test(prodId);
+    if (!isMongoId) {
+      alert("ℹ️ This product is from the default list and is not stored in the database. Use 'Add New Product' to add your own products.");
+      return;
+    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/products/${prodId}`, {
@@ -268,9 +283,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       });
 
       if (res.ok) {
-        alert("Product deleted successfully!");
+        alert("✅ Product deleted successfully!");
         onRefreshProducts();
-        fetchData(); // reload stats
+        fetchData();
       } else {
         alert("Failed to delete product.");
       }
@@ -279,6 +294,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       alert("Error deleting product.");
     }
   };
+
 
   const startEditProduct = (p: Product) => {
     const dbId = p._id || p.id;
