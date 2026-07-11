@@ -5,10 +5,10 @@ interface CategoryShowcaseProps {
 }
 
 const categories = [
-  { name: "New Arrivals", image: "" },
-  { name: "Best Sellers", image: "" },
-  { name: "Party Wear", image: "" },
-  { name: "Sale", image: "" },
+  { name: "New Arrivals", image: "/images/kurti-peach.jpg" },
+  { name: "Best Sellers", image: "/images/kurti-blue.jpg" },
+  { name: "Party Wear", image: "/images/kurti-maroon.jpg" },
+  { name: "Sale", image: "/images/kurti-mustard.jpg" },
 ];
 
 const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onNavigate }) => {

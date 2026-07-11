@@ -22,6 +22,7 @@ import CategoryShowcase from "./components/CategoryShowcase";
 import SectionHeader from "./components/SectionHeader";
 import ScrollReveal from "./components/ScrollReveal";
 import { API_BASE_URL } from "./api";
+import { BrandStory, Lookbook, Testimonials, InstagramFeed, Newsletter } from "./components/HomeExtras";
 
 export interface OrderItem {
   id: string | number;
@@ -380,6 +381,24 @@ const App: React.FC = () => {
             ))}
           </div>
         </ScrollReveal>
+
+        <ScrollReveal delay={200}>
+          <BrandStory />
+        </ScrollReveal>
+
+        <ScrollReveal delay={250}>
+          <Lookbook />
+        </ScrollReveal>
+
+        <ScrollReveal delay={300}>
+          <Testimonials />
+        </ScrollReveal>
+
+        <ScrollReveal delay={350}>
+          <InstagramFeed />
+        </ScrollReveal>
+
+        <Newsletter />
       </>
     );
   };

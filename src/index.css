@@ -3630,3 +3630,435 @@ body {
   .admin-product-form .form-group.span-2 { grid-column: span 1; }
   .images-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   BRAND STORY SECTION
+   ============================================================ */
+.brand-story-section {
+  padding: 80px 0;
+  border-top: 1px solid #f2f5fa;
+}
+
+.brand-story-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.section-tagline {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #c9a24b;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-title-left {
+  font-size: 32px;
+  font-weight: 800;
+  color: #14213d;
+  margin-bottom: 20px;
+  line-height: 1.25;
+}
+
+.brand-story-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+.story-features {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+  border-top: 1px dashed #ddd;
+  padding-top: 20px;
+}
+
+.story-feat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.feat-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #c9a24b;
+}
+
+.feat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #777;
+  margin-top: 2px;
+}
+
+.brand-story-image-wrap {
+  position: relative;
+  border-radius: 20px;
+}
+
+.brand-story-image {
+  width: 100%;
+  border-radius: 16px;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  display: block;
+  z-index: 2;
+  position: relative;
+}
+
+.image-gold-accent-border {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: -15px;
+  bottom: -15px;
+  border: 2px solid #c9a24b;
+  border-radius: 16px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.story-floating-badge {
+  position: absolute;
+  bottom: 25px;
+  left: -20px;
+  background: #14213d;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 3;
+}
+
+.story-floating-badge h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c9a24b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.story-floating-badge p {
+  font-size: 11px;
+  color: #ddd;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   LOOKBOOK SECTION
+   ============================================================ */
+.lookbook-section {
+  padding: 60px 0;
+}
+
+.section-header-wrap {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.lookbook-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  transition: transform 0.3s;
+}
+
+.lookbook-card:hover {
+  transform: translateY(-5px);
+}
+
+.lookbook-img-wrap {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+}
+
+.lookbook-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lookbook-overlay {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.lookbook-tag {
+  background: rgba(255, 255, 255, 0.95);
+  color: #14213d;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.lookbook-info {
+  padding: 20px;
+}
+
+.lookbook-info h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #14213d;
+  margin-bottom: 6px;
+}
+
+.lookbook-info p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   TESTIMONIALS SECTION
+   ============================================================ */
+.testimonials-section {
+  background: #f0f3f8;
+  padding: 80px 24px;
+  border-radius: 20px;
+  margin: 40px 0;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.testimonial-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(20, 33, 61, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stars-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.star-filled {
+  color: #c9a24b;
+  fill: #c9a24b;
+  font-size: 14px;
+}
+
+.testimonial-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+  font-style: italic;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.testimonial-author h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #14213d;
+}
+
+.testimonial-author p {
+  font-size: 11px;
+  color: #777;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   INSTAGRAM SECTION
+   ============================================================ */
+.instagram-section {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.instagram-header {
+  margin-bottom: 24px;
+}
+
+.instagram-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #14213d;
+  margin-top: 8px;
+}
+
+.instagram-header p {
+  color: #c9a24b;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.instagram-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.instagram-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.instagram-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 33, 61, 0.6);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.instagram-card:hover img {
+  transform: scale(1.08);
+}
+
+.instagram-card:hover .instagram-overlay {
+  opacity: 1;
+}
+
+/* ============================================================
+   NEWSLETTER BANNER
+   ============================================================ */
+.newsletter-banner {
+  position: relative;
+  background: linear-gradient(135deg, #14213d 0%, #0d1526 100%);
+  border-radius: 24px;
+  padding: 60px 40px;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  margin: 40px 0 20px;
+}
+
+.newsletter-content {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.newsletter-mail-icon {
+  margin-bottom: 16px;
+}
+
+.newsletter-banner h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.newsletter-banner p {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.newsletter-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  color: white;
+  font-size: 14px;
+}
+
+.newsletter-form input::placeholder {
+  color: #999;
+}
+
+.newsletter-form button {
+  background: #c9a24b;
+  color: #0d1526;
+  border: none;
+  font-weight: 700;
+  padding: 0 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+  font-size: 14px;
+}
+
+.newsletter-form button:hover {
+  background: #d4b263;
+}
+
+.subscribed-success-message {
+  background: rgba(46, 117, 89, 0.15);
+  border: 1px solid #2e7559;
+  color: #52c41a;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* responsive overrides */
+@media (max-width: 992px) {
+  .brand-story-grid { grid-template-columns: 1fr; gap: 40px; }
+  .brand-story-image-wrap { max-width: 500px; margin: 0 auto; }
+}
+
+@media (max-width: 768px) {
+  .lookbook-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+  .newsletter-banner { padding: 40px 20px; }
+  .newsletter-form { flex-direction: column; background: transparent; border: none; padding: 0; }
+  .newsletter-form input { background: rgba(255, 255, 255, 0.08); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 10px; text-align: center; }
+  .newsletter-form button { width: 100%; padding: 12px; justify-content: center; }
+}

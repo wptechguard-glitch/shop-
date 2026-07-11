@@ -9,9 +9,9 @@ interface Slide {
 }
 
 const slides: Slide[] = [
-  { title: "Elegant Kurti Collection", subtitle: "STARTING FROM ₹399", image: "", buttonText: "Shop Now" },
-  { title: "New Arrivals This Week", subtitle: "UPTO 50% OFF", image: "", buttonText: "Explore" },
-  { title: "Party Wear Special", subtitle: "DESIGNER PICKS", image: "", buttonText: "View Collection" },
+  { title: "Elegant Kurti Collection", subtitle: "STARTING FROM ₹399", image: "/images/kurti-maroon.jpg", buttonText: "Shop Now" },
+  { title: "New Arrivals This Week", subtitle: "UPTO 50% OFF", image: "/images/kurti-peach.jpg", buttonText: "Explore" },
+  { title: "Party Wear Special", subtitle: "DESIGNER PICKS", image: "/images/kurti-blue.jpg", buttonText: "View Collection" },
 ];
 
 const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) => {
