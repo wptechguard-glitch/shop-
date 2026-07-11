@@ -10,7 +10,9 @@ export interface Product {
   category: "Women" | "Men";
   inStock: boolean;
   stockQuantity?: number;
+  sizes?: { size: string; quantity: number }[];
 }
+
 
 export const products: Product[] = [
   { id: 1, name: "Beige Floral Print Linen Anarkali Kurti", price: 499, originalPrice: 998, discount: 50, rating: 3.7, images: ["", "", "", ""], category: "Women", inStock: true },

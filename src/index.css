@@ -1775,6 +1775,28 @@ body {
   border-color: #14213d;
 }
 
+.size-chip.out-of-stock-size {
+  position: relative;
+  background: #f5f5f5;
+  color: #aaa;
+  border-color: #eee;
+  cursor: not-allowed !important;
+}
+
+.size-badge-out {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #c0392b;
+  color: white;
+  font-size: 8px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
 .detail-actions {
   display: flex;
   gap: 12px;

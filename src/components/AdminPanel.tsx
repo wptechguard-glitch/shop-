@@ -132,7 +132,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
   const [prodCategory, setProdCategory] = useState<"Women" | "Men">("Women");
   const [prodInStock, setProdInStock] = useState(true);
   const [prodImages, setProdImages] = useState<string[]>(["", "", "", ""]);
-  const [prodStockQty, setProdStockQty] = useState<string>("50");
+  const [prodSizes, setProdSizes] = useState<Record<string, number>>({ S: 10, M: 15, L: 15, XL: 10, XXL: 5 });
   const [actionLoading, setActionLoading] = useState(false);
 
   const headers = {
@@ -206,9 +206,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     const discountPercent = origPriceNum > priceNum 
       ? Math.round(((origPriceNum - priceNum) / origPriceNum) * 100)
       : 0;
-    const stockQtyNum = Number(prodStockQty) || 0;
-    // Auto mark out of stock if qty is 0
-    const effectiveInStock = stockQtyNum > 0 ? prodInStock : false;
+    
+    // Construct sizes array and calculate total stock
+    const sizesArray = ["S", "M", "L", "XL", "XXL"].map((sz) => ({
+      size: sz,
+      quantity: Number(prodSizes[sz]) || 0
+    }));
+    const totalQty = sizesArray.reduce((sum, s) => sum + s.quantity, 0);
+    const effectiveInStock = totalQty > 0;
 
     // Filter empty image URLs and supply placeholder if none provided
     const validImages = prodImages.filter((img) => img.trim() !== "");
@@ -220,7 +225,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       discount: discountPercent,
       category: prodCategory,
       inStock: effectiveInStock,
-      stockQuantity: stockQtyNum,
+      stockQuantity: totalQty,
+      sizes: sizesArray,
       images: validImages.length > 0 ? validImages : ["https://via.placeholder.com/300x380?text=ShopKart"],
       rating: 4.0
     };
@@ -304,8 +310,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     setProdOriginalPrice(String(p.originalPrice));
     setProdCategory(p.category);
     setProdInStock(p.inStock);
-    setProdStockQty(String(p.stockQuantity ?? 50));
     
+    // Map size-wise stock quantity
+    if (p.sizes && Array.isArray(p.sizes) && p.sizes.length > 0) {
+      const sizesMap: Record<string, number> = { S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
+      p.sizes.forEach((s) => {
+        sizesMap[s.size] = s.quantity;
+      });
+      setProdSizes(sizesMap);
+    } else {
+      setProdSizes({
+        S: p.inStock ? 10 : 0,
+        M: p.inStock ? 15 : 0,
+        L: p.inStock ? 15 : 0,
+        XL: p.inStock ? 10 : 0,
+        XXL: p.inStock ? 5 : 0
+      });
+    }
+
     // Fill images up to 4 elements
     const filledImages = [...p.images];
     while (filledImages.length < 4) filledImages.push("");
@@ -322,7 +344,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     setProdOriginalPrice("");
     setProdCategory("Women");
     setProdInStock(true);
-    setProdStockQty("50");
+    setProdSizes({ S: 10, M: 15, L: 15, XL: 10, XXL: 5 });
     setProdImages(["", "", "", ""]);
     setShowProductForm(false);
   };
@@ -454,20 +476,31 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>Stock Quantity</label>
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="e.g. 50"
-                      value={prodStockQty}
-                      onChange={(e) => {
-                        setProdStockQty(e.target.value);
-                        // Auto mark out of stock when qty = 0
-                        if (Number(e.target.value) === 0) setProdInStock(false);
-                        else if (Number(e.target.value) > 0 && !prodInStock) setProdInStock(true);
-                      }}
-                    />
+                  <div className="form-group span-2">
+                    <label>Stock Quantity by Size (S, M, L, XL, XXL)</label>
+                    <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+                      {["S", "M", "L", "XL", "XXL"].map((sz) => (
+                        <div key={sz} style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
+                          <span style={{ fontSize: 11, fontWeight: "bold", color: "#555" }}>{sz}</span>
+                          <input
+                            type="number"
+                            min="0"
+                            style={{ width: "100%", textAlign: "center", padding: "6px", borderRadius: "6px", border: "1px solid #ddd" }}
+                            value={prodSizes[sz] ?? 0}
+                            onChange={(e) => {
+                              const val = Math.max(0, parseInt(e.target.value) || 0);
+                              setProdSizes((prev) => {
+                                const newSizes = { ...prev, [sz]: val };
+                                const newTotal = Object.values(newSizes).reduce((sum, v) => sum + v, 0);
+                                if (newTotal > 0) setProdInStock(true);
+                                else setProdInStock(false);
+                                return newSizes;
+                              });
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="form-group">
@@ -501,16 +534,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                         type="checkbox"
                         checked={prodInStock}
                         onChange={(e) => {
-                          setProdInStock(e.target.checked);
-                          if (!e.target.checked && Number(prodStockQty) > 0) setProdStockQty("0");
+                          const isChecked = e.target.checked;
+                          setProdInStock(isChecked);
+                          if (!isChecked) {
+                            setProdSizes({ S: 0, M: 0, L: 0, XL: 0, XXL: 0 });
+                          } else {
+                            // If they check it but all are 0, set M to 10 as fallback
+                            const total = Object.values(prodSizes).reduce((sum, v) => sum + v, 0);
+                            if (total === 0) {
+                              setProdSizes({ S: 0, M: 10, L: 0, XL: 0, XXL: 0 });
+                            }
+                          }
                         }}
                       />
                       <span style={{ color: prodInStock ? "#2f7a4f" : "#c0392b", fontWeight: 700 }}>
                         {prodInStock ? "✅ In Stock" : "❌ Out of Stock"}
                       </span>
                     </label>
-                    {Number(prodStockQty) === 0 && (
-                      <p style={{ fontSize: 11, color: "#c0392b", marginTop: 4 }}>Qty is 0 → auto marked Out of Stock</p>
+                    {Object.values(prodSizes).reduce((sum, v) => sum + v, 0) === 0 && (
+                      <p style={{ fontSize: 11, color: "#c0392b", marginTop: 4 }}>All sizes are 0 → marked Out of Stock</p>
                     )}
                   </div>
                 </div>

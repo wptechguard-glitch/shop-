@@ -24,7 +24,23 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 }) => {
   const product = products.find((p) => String(p.id) === String(productId));
   const [activeImg, setActiveImg] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("M");
+  const sizeStockMap = product && product.sizes && Array.isArray(product.sizes)
+    ? product.sizes.reduce((acc, s) => {
+        acc[s.size] = s.quantity;
+        return acc;
+      }, {} as Record<string, number>)
+    : null;
+
+  // Find first size that has stock, default to "M"
+  const getInitialSize = () => {
+    if (sizeStockMap) {
+      const availableSize = sizes.find((s) => (sizeStockMap[s] ?? 0) > 0);
+      if (availableSize) return availableSize;
+    }
+    return "M";
+  };
+
+  const [selectedSize, setSelectedSize] = useState(getInitialSize);
 
   if (!product) {
     return (
@@ -39,6 +55,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 
   const isWishlisted = wishlist.some((x) => String(x) === String(product.id));
   const related = products.filter((p) => String(p.id) !== String(product.id)).slice(0, 4);
+
+  const selectedSizeQty = sizeStockMap ? (sizeStockMap[selectedSize] ?? 0) : 10;
+  const isOutOfStock = !product.inStock || selectedSizeQty <= 0;
 
   return (
     <div className="product-detail-page">
@@ -102,21 +121,41 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           <div className="detail-size-block">
             <span className="field-label">Select Size</span>
             <div className="size-row">
-              {sizes.map((size) => (
-                <button
-                  key={size}
-                  className={`size-chip ${selectedSize === size ? "active" : ""}`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
+              {sizes.map((size) => {
+                const qty = sizeStockMap ? (sizeStockMap[size] ?? 0) : 10;
+                const isSizeOutOfStock = qty <= 0;
+                return (
+                  <button
+                    key={size}
+                    className={`size-chip ${selectedSize === size ? "active" : ""} ${isSizeOutOfStock ? "out-of-stock-size" : ""}`}
+                    onClick={() => !isSizeOutOfStock && setSelectedSize(size)}
+                    style={{
+                      opacity: isSizeOutOfStock ? 0.5 : 1,
+                      textDecoration: isSizeOutOfStock ? "line-through" : "none",
+                      cursor: isSizeOutOfStock ? "not-allowed" : "pointer",
+                      position: "relative"
+                    }}
+                    title={isSizeOutOfStock ? "Out of Stock" : `${qty} items left`}
+                  >
+                    {size}
+                    {isSizeOutOfStock && <span className="size-badge-out">Out</span>}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="detail-actions">
-            <button className="add-cart-btn detail-add-btn" onClick={() => onAddToCart(product.id)}>
-              <FiShoppingCart className="icon" /> Add to Cart
+            <button
+              className="add-cart-btn detail-add-btn"
+              onClick={() => !isOutOfStock && onAddToCart(product.id)}
+              disabled={isOutOfStock}
+              style={{
+                background: isOutOfStock ? "#ccc" : "",
+                cursor: isOutOfStock ? "not-allowed" : "pointer"
+              }}
+            >
+              <FiShoppingCart className="icon" /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
             <button
               className={`detail-wishlist-btn ${isWishlisted ? "active" : ""}`}
@@ -125,6 +164,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
               <FiHeart />
             </button>
           </div>
+
 
           <div className="detail-trust-row">
             <div className="trust-item">
