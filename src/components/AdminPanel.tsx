@@ -726,10 +726,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                 />
               </div>
 
-              <button className="admin-store-btn" onClick={() => { setEditingProductId(null); setShowProductForm(true); }}>
-                <FiPlus size={16} /> Add New Product
-              </button>
+              <div style={{ display: "flex", gap: 10 }}>
+                {products.length === 0 && (
+                  <button
+                    className="admin-refresh-btn"
+                    style={{ background: "#2f7a4f", color: "white", border: "none" }}
+                    onClick={async () => {
+                      if (!window.confirm("Seed default products into MongoDB? (Only runs if DB is empty)")) return;
+                      try {
+                        const res = await fetch(`${API_BASE_URL}/products/seed`, { method: "POST", headers });
+                        const data = await res.json();
+                        alert(data.message);
+                        onRefreshProducts();
+                      } catch {
+                        alert("Seed failed. Check backend connection.");
+                      }
+                    }}
+                  >
+                    🌱 Seed DB
+                  </button>
+                )}
+                <button className="admin-store-btn" onClick={() => { setEditingProductId(null); setShowProductForm(true); }}>
+                  <FiPlus size={16} /> Add New Product
+                </button>
+              </div>
             </div>
+
 
             {/* Products Inventory list */}
             <div className="admin-inventory-list">
