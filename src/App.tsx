@@ -206,57 +206,6 @@ const App: React.FC = () => {
     setPendingAddress(address);
   };
 
-  const handlePlaceOrder = async (paymentMethod: string) => {
-    if (!pendingAddress) return;
-
-    const orderItems = Object.entries(cart).map(([id, qty]) => {
-      const p = productsList.find((prod) => String(prod.id) === String(id))!;
-      return { id: p.id, name: p.name, price: p.price, qty };
-    });
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          items: orderItems,
-          total: cartTotal,
-          address: pendingAddress,
-          paymentMethod
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error("Order placement failed:", data.message);
-        alert(data.message || "Failed to place order. Please try again.");
-        return;
-      }
-
-      const createdOrder: Order = {
-        id: data.order.orderId || data.order._id,
-        items: data.order.items,
-        total: data.order.total,
-        address: data.order.address,
-        paymentMethod: data.order.paymentMethod,
-        date: data.order.date,
-        status: data.order.status
-      };
-
-      setOrders((prev) => [createdOrder, ...prev]);
-      setLastOrder(createdOrder);
-      setCart({});
-      setPendingAddress(null);
-      setPage("order-success");
-    } catch (err) {
-      console.error("Order placement network error:", err);
-      alert("Network error: Unable to connect to server. Please try again.");
-    }
-  };
 
   const renderPage = (): React.ReactNode => {
     if (page === "login") return <Login onNavigate={setPage} onLoginSuccess={handleLoginSuccess} />;
@@ -278,14 +227,28 @@ const App: React.FC = () => {
         />
       );
 
-    if (page === "payment")
+    if (page === "payment") {
+      const orderItems = Object.entries(cart).map(([id, qty]) => {
+        const p = productsList.find((prod) => String(prod.id) === String(id))!;
+        return { id: p.id, name: p.name, price: p.price, qty };
+      });
       return (
         <Payment
           totalAmount={cartTotal}
+          cartItems={orderItems}
+          address={pendingAddress}
+          authToken={authToken}
           onNavigate={setPage}
-          onPlaceOrder={handlePlaceOrder}
+          onPaymentSuccess={(createdOrder: any) => {
+            setOrders((prev) => [createdOrder, ...prev]);
+            setLastOrder(createdOrder);
+            setCart({});
+            setPendingAddress(null);
+            setPage("order-success");
+          }}
         />
       );
+    }
 
     if (page === "order-success" && lastOrder)
       return (
