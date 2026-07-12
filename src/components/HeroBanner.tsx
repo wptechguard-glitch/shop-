@@ -57,58 +57,42 @@ const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNaviga
     }, 300);
   };
 
-  const slide = slides[current];
-
   return (
-    <div className="hero-v2">
-      <div className="hero-v2-inner">
-        {/* Left Column: Text Content */}
-        <div className="hero-v2-left">
-          <div className={`hero-v2-content ${animating ? "fade-out" : "fade-in"}`}>
-            <span className="hero-v2-tag" style={{ background: slide.accent }}>
-              {slide.tag}
-            </span>
-            <h1 className="hero-v2-title">{slide.title}</h1>
-            <p className="hero-v2-sub">{slide.subtitle}</p>
-            <div className="hero-v2-actions">
-              <button className="hero-v2-cta" onClick={() => onNavigate("category")}>
-                {slide.cta}
-              </button>
-              <button className="hero-v2-cta-ghost" onClick={() => onNavigate("category")}>
-                Explore All
-              </button>
+    <div className="hero-banner">
+      {/* Background layers */}
+      {slides.map((s, idx) => (
+        <div
+          key={idx}
+          className={`hero-slide ${idx === current ? "active" : ""}`}
+          style={{ backgroundImage: `url(${s.image})` }}
+        >
+          <div className="hero-overlay" />
+          <div className="hero-content">
+            <span className="hero-tag-pill" style={{ background: s.accent }}>{s.tag}</span>
+            <h1>{s.title}</h1>
+            <p>{s.subtitle}</p>
+            <div className="hero-actions">
+              <button onClick={() => onNavigate("category")}>{s.cta}</button>
             </div>
           </div>
         </div>
-
-        {/* Right Column: Contained Images to Prevent Cropping */}
-        <div className="hero-v2-right">
-          {slides.map((s, idx) => (
-            <div
-              key={idx}
-              className={`hero-v2-img-container ${idx === current ? "active" : ""}`}
-            >
-              <img src={s.image} alt={s.title} className="hero-v2-img" />
-            </div>
-          ))}
-        </div>
-      </div>
+      ))}
 
       {/* Navigation Arrows */}
-      <button className="hero-v2-arrow left" onClick={() => goTo((current - 1 + slides.length) % slides.length)}>
+      <button className="hero-arrow left" onClick={() => goTo((current - 1 + slides.length) % slides.length)}>
         <FiChevronLeft />
       </button>
-      <button className="hero-v2-arrow right" onClick={() => goTo((current + 1) % slides.length)}>
+      <button className="hero-arrow right" onClick={() => goTo((current + 1) % slides.length)}>
         <FiChevronRight />
       </button>
 
       {/* Navigation Dots */}
-      <div className="hero-v2-dots">
+      <div className="hero-dots">
         {slides.map((_, idx) => (
-          <button
+          <span
             key={idx}
-            className={`hero-v2-dot ${idx === current ? "active" : ""}`}
-            onClick={() => setCurrent(idx)}
+            className={`hero-dot ${idx === current ? "active" : ""}`}
+            onClick={() => goTo(idx)}
           />
         ))}
       </div>
