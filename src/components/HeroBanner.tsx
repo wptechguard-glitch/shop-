@@ -24,7 +24,7 @@ const slides: Slide[] = [
     title: "Men's Kurta Collection",
     subtitle: "Classic cuts. Premium cotton. Made for every occasion.",
     cta: "Shop Men's",
-    image: "/images/kurti-blue.jpg",
+    image: "/images/men-kurta.jpg",
     accent: "#3a5a8c",
   },
   {
@@ -61,32 +61,40 @@ const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNaviga
 
   return (
     <div className="hero-v2">
-      {/* Background layers */}
-      {slides.map((s, idx) => (
-        <div
-          key={idx}
-          className={`hero-v2-bg ${idx === current ? "active" : ""}`}
-          style={{ backgroundImage: `url(${s.image})` }}
-        />
-      ))}
-      <div className="hero-v2-overlay" />
+      <div className="hero-v2-inner">
+        {/* Left Column: Text Content */}
+        <div className="hero-v2-left">
+          <div className={`hero-v2-content ${animating ? "fade-out" : "fade-in"}`}>
+            <span className="hero-v2-tag" style={{ background: slide.accent }}>
+              {slide.tag}
+            </span>
+            <h1 className="hero-v2-title">{slide.title}</h1>
+            <p className="hero-v2-sub">{slide.subtitle}</p>
+            <div className="hero-v2-actions">
+              <button className="hero-v2-cta" onClick={() => onNavigate("category")}>
+                {slide.cta}
+              </button>
+              <button className="hero-v2-cta-ghost" onClick={() => onNavigate("category")}>
+                Explore All
+              </button>
+            </div>
+          </div>
+        </div>
 
-      {/* Content */}
-      <div className={`hero-v2-content ${animating ? "fade-out" : "fade-in"}`}>
-        <span className="hero-v2-tag" style={{ background: slide.accent }}>{slide.tag}</span>
-        <h1 className="hero-v2-title">{slide.title}</h1>
-        <p className="hero-v2-sub">{slide.subtitle}</p>
-        <div className="hero-v2-actions">
-          <button className="hero-v2-cta" onClick={() => onNavigate("category")}>
-            {slide.cta}
-          </button>
-          <button className="hero-v2-cta-ghost" onClick={() => onNavigate("category")}>
-            View All
-          </button>
+        {/* Right Column: Contained Images to Prevent Cropping */}
+        <div className="hero-v2-right">
+          {slides.map((s, idx) => (
+            <div
+              key={idx}
+              className={`hero-v2-img-container ${idx === current ? "active" : ""}`}
+            >
+              <img src={s.image} alt={s.title} className="hero-v2-img" />
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Arrows */}
+      {/* Navigation Arrows */}
       <button className="hero-v2-arrow left" onClick={() => goTo((current - 1 + slides.length) % slides.length)}>
         <FiChevronLeft />
       </button>
@@ -94,13 +102,13 @@ const HeroBanner: React.FC<{ onNavigate: (page: string) => void }> = ({ onNaviga
         <FiChevronRight />
       </button>
 
-      {/* Dots */}
+      {/* Navigation Dots */}
       <div className="hero-v2-dots">
         {slides.map((_, idx) => (
           <button
             key={idx}
             className={`hero-v2-dot ${idx === current ? "active" : ""}`}
-            onClick={() => goTo(idx)}
+            onClick={() => setCurrent(idx)}
           />
         ))}
       </div>

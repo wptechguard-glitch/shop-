@@ -15,7 +15,7 @@ const genders = [
     id: "men",
     label: "Men's",
     desc: "Kurtas, Nehru Jackets, Sherwani",
-    image: "/images/kurti-blue.jpg",
+    image: "/images/men-kurta.jpg",
   },
 ];
 
