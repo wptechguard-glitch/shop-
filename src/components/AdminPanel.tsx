@@ -349,10 +349,39 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     setShowProductForm(false);
   };
 
+  const cleanImageUrl = (val: string): string => {
+    if (!val) return "";
+    
+    // 1. Check BBCode [img]...[/img]
+    const bbcodeMatch = val.match(/\[img\]\s*(https?:\/\/[^\]\s]+)\s*\[\/img\]/i);
+    if (bbcodeMatch) return bbcodeMatch[1].trim();
+
+    // 2. Check HTML img src
+    const htmlMatch = val.match(/<img[^>]+src=["']\s*(https?:\/\/[^"'\s]+)\s*["']/i);
+    if (htmlMatch) return htmlMatch[1].trim();
+
+    // 3. Check HTML anchor href pointing to direct image
+    const hrefMatch = val.match(/href=["']\s*(https?:\/\/[^"'\s]+\.(?:png|jpg|jpeg|gif|webp|svg)(?:\?[^"'\s]*)?)\s*["']/i);
+    if (hrefMatch) return hrefMatch[1].trim();
+
+    // 4. Check Markdown image link
+    const mdMatch = val.match(/!\[.*?\]\(\s*(https?:\/\/[^\)\s]+)\s*\)/i);
+    if (mdMatch) return mdMatch[1].trim();
+
+    // 5. If it contains HTML or brackets, try to extract first URL
+    if (val.includes("<") || val.includes("[") || val.includes("(")) {
+      const urlMatch = val.match(/(https?:\/\/[^\s"'\]\)>]+)/);
+      if (urlMatch) return urlMatch[1].trim();
+    }
+
+    return val.trim();
+  };
+
   const updateImageIndex = (index: number, val: string) => {
+    const cleaned = cleanImageUrl(val);
     setProdImages((prev) => {
       const copy = [...prev];
-      copy[index] = val;
+      copy[index] = cleaned;
       return copy;
     });
   };
