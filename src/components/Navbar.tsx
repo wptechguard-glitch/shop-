@@ -30,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, c
     <nav className="navbar">
       <div className="navbar-top">
         <div className="store-name" onClick={() => onNavigate("home")}>
-          Shop<span>Kart</span>
+          Gau<span>Rangi</span>
         </div>
 
         <form className="search-box" onSubmit={handleSearch}>

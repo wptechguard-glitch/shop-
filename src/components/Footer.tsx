@@ -38,7 +38,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="footer-top">
         <div className="footer-col footer-brand-col">
           <h4 className="footer-logo">
-            Shop<span>Kart</span>
+            Gau<span>Rangi</span>
           </h4>
           <p className="footer-tagline">
             Curated ethnic wear for the modern woman — premium kurtis,
@@ -72,7 +72,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <h4>Get In Touch</h4>
           <p><FiMapPin /> Jaipur, Rajasthan, India</p>
           <p><FiPhone /> +91 90000 00000</p>
-          <p><FiMail /> support@shopkart.com</p>
+          <p><FiMail /> support@gaurangi.com</p>
         </div>
       </div>
 
