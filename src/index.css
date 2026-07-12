@@ -52,6 +52,32 @@ body {
   vertical-align: middle;
 }
 
+/* Global smooth transitions for interactive elements */
+button, a, .nav-item, .product-card, .bottom-item, .store-name, .category-card {
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Page-enter fade-in animation */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.home-page, .auth-split, .product-detail-page, .cart-page,
+.wishlist-page, .category-page, .orders-page, .checkout-page {
+  animation: pageEnter 0.3s ease both;
+}
+
+/* Card hover lift */
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(20,33,61,0.15);
+}
+
+/* Button press feedback */
+button:active { transform: scale(0.97); }
+
 .desktop-only { display: flex; }
 .mobile-only { display: none; }
 
@@ -269,7 +295,8 @@ body {
 }
 
 .bottom-item.active {
-  color: #14213d;
+  color: #c9a24b;
+  font-weight: 600;
 }
 
 .badge-sm {
@@ -301,6 +328,8 @@ body {
   background-position: center 10%;
   background-repeat: no-repeat;
   opacity: 0;
+  pointer-events: none;
+  z-index: 0;
   transition: opacity 0.8s ease;
   display: flex;
   align-items: center;
@@ -309,6 +338,8 @@ body {
 
 .hero-slide.active {
   opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .hero-overlay {
@@ -1218,11 +1249,15 @@ body {
   background-size: cover;
   background-position: center;
   opacity: 0;
+  pointer-events: none;
+  z-index: 0;
   transition: opacity 1s ease;
 }
 
 .category-hero-slide.active {
   opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .category-hero-overlay {
@@ -1426,18 +1461,23 @@ body {
   background: white;
   border: none;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: #7a7371;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: all 0.2s ease;
 }
-
+.wishlist-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+}
 .wishlist-btn.active {
-  color: #14213d;
+  color: #c0392b;
+  background: #fff0f0;
 }
 
 .thumb-row {
@@ -1527,7 +1567,9 @@ body {
 }
 
 .add-cart-btn:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(20,33,61,0.3);
 }
 
 /* ============================================================
@@ -3037,8 +3079,38 @@ body {
   .desktop-only { display: none; }
   .mobile-only { display: flex; }
 
-  .navbar-top { padding: 10px 12px; }
-  .store-name { font-size: 19px; }
+  .navbar-top {
+    padding: 8px 12px;
+    flex-wrap: nowrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .store-name {
+    font-size: 16px;
+    gap: 4px;
+  }
+  .navbar-logo-svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .navbar-brand-text {
+    font-size: 15px;
+  }
+  .search-box {
+    flex: 1;
+    max-width: none;
+  }
+  .search-box input {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .search-box button {
+    padding: 0 10px;
+    font-size: 15px;
+  }
+  .menu-icon {
+    font-size: 22px;
+  }
 
   body { padding-bottom: 60px; }
 
@@ -3228,17 +3300,33 @@ body {
 
 .out-of-stock-overlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(13, 21, 38, 0.8);
+  inset: 0;
+  background: rgba(13, 21, 38, 0.72);
   color: white;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  padding: 10px;
-  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  z-index: 3;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+/* Dim the image behind out of stock overlay */
+.product-image.dimmed {
+  filter: grayscale(40%) contrast(90%);
+}
+
+.detail-image-out-overlay {
+  font-size: 18px;
+  letter-spacing: 3px;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  background: rgba(13, 21, 38, 0.78);
 }
 
 .add-cart-btn:disabled {

@@ -400,7 +400,7 @@ const App: React.FC = () => {
         onLogout={handleLogout}
       />
       {renderPage()}
-      <Footer />
+      {page === "home" && <Footer />}
       <BottomNav active={page} cartCount={cartCount} wishlistCount={wishlist.length} onNavigate={setPage} />
     </>
   );

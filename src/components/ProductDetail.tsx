@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiHeart, FiShoppingCart, FiChevronLeft, FiTruck, FiRefreshCw, FiShield } from "react-icons/fi";
 import type { Product } from "../data/products";
 import ProductCard from "./ProductCart";
@@ -42,6 +42,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 
   const [selectedSize, setSelectedSize] = useState(getInitialSize);
 
+  // Auto-scroll to top when product ID changes (for related products navigation)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setActiveImg(0); // reset thumbnail to first image
+  }, [productId]);
+
   if (!product) {
     return (
       <div className="empty-state">
@@ -67,7 +73,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 
       <div className="product-detail-main">
         <div className="detail-gallery">
-          <div className="detail-main-img">
+          <div className="detail-main-img" style={{ position: "relative" }}>
+            {isOutOfStock && (
+              <div className="out-of-stock-overlay detail-image-out-overlay">
+                Out of Stock
+              </div>
+            )}
             <img
               src={product.images[activeImg] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&q=80"}
               alt={product.name}
