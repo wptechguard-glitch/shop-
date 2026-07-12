@@ -112,8 +112,8 @@ const App: React.FC = () => {
 
   // Check localStorage on app load — keeps user logged in after refresh
   useEffect(() => {
-    const savedToken = localStorage.getItem("shopkart_token");
-    const savedUser = localStorage.getItem("shopkart_user");
+    const savedToken = localStorage.getItem("gaurangi_token");
+    const savedUser = localStorage.getItem("gaurangi_user");
     if (savedToken && savedUser) {
       setAuthToken(savedToken);
       setCurrentUser(JSON.parse(savedUser));
@@ -158,15 +158,15 @@ const App: React.FC = () => {
   const handleLoginSuccess = (token: string, user: AuthUser) => {
     setAuthToken(token);
     setCurrentUser(user);
-    localStorage.setItem("shopkart_token", token);
-    localStorage.setItem("shopkart_user", JSON.stringify(user));
+    localStorage.setItem("gaurangi_token", token);
+    localStorage.setItem("gaurangi_user", JSON.stringify(user));
   };
 
   const handleLogout = () => {
     setAuthToken(null);
     setCurrentUser(null);
-    localStorage.removeItem("shopkart_token");
-    localStorage.removeItem("shopkart_user");
+    localStorage.removeItem("gaurangi_token");
+    localStorage.removeItem("gaurangi_user");
     setPage("home");
   };
 

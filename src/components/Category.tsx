@@ -46,7 +46,7 @@ const Category: React.FC<CategoryProps> = ({ products, onAddToCart, onToggleWish
             key={idx}
             className={`category-hero-slide ${activeSlide === idx ? "active" : ""}`}
             style={{
-              backgroundImage: `url(${img || "https://via.placeholder.com/1400x500?text=ShopKart+Collection"})`,
+              backgroundImage: `url(${img || "https://via.placeholder.com/1400x500?text=Gaurangi+Collection"})`,
             }}
           />
         ))}

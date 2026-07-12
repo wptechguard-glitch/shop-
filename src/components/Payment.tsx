@@ -101,7 +101,7 @@ const Payment: React.FC<PaymentProps> = ({
           key: orderData.keyId,
           amount: orderData.amount,
           currency: orderData.currency,
-          name: "ShopKart",
+          name: "Gaurangi",
           description: "Ethnic Wear Shopping Checkout",
           order_id: orderData.orderId,
           theme: { color: "#14213d" }, // Dark premium navy theme color

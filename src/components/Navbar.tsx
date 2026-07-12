@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { FiSearch, FiMenu, FiHeart, FiShoppingCart, FiHome, FiGrid, FiUser, FiX, FiLogOut } from "react-icons/fi";
+import { FiSearch, FiMenu, FiHeart, FiShoppingCart, FiHome, FiGrid, FiUser, FiX, FiLogOut, FiSettings } from "react-icons/fi";
 import "../index.css";
 
 interface AuthUser {
   id: string;
   fullName: string;
   email: string;
+  isAdmin?: boolean;
 }
 
 interface NavbarProps {
@@ -29,8 +30,15 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, c
   return (
     <nav className="navbar">
       <div className="navbar-top">
+        {/* Logo Image + Brand Name */}
         <div className="store-name" onClick={() => onNavigate("home")}>
-          Gau<span>Rangi</span>
+          <img
+            src="/gaurangi-logo.jpg"
+            alt="Gaurangi Logo"
+            className="navbar-logo-img"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+          />
+          <span className="navbar-brand-text">Gau<span>rangi</span></span>
         </div>
 
         <form className="search-box" onSubmit={handleSearch}>
@@ -68,6 +76,11 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, c
                   <div onClick={() => { onNavigate("orders"); setUserMenuOpen(false); }}>
                     My Orders
                   </div>
+                  {currentUser.isAdmin && (
+                    <div onClick={() => { onNavigate("admin"); setUserMenuOpen(false); }}>
+                      <FiSettings className="icon" /> Admin Panel
+                    </div>
+                  )}
                   <div
                     onClick={() => {
                       setUserMenuOpen(false);
@@ -95,10 +108,15 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, c
         <div className="mobile-menu">
           {currentUser ? (
             <>
-              <div>Hi, {currentUser.fullName.split(" ")[0]}</div>
+              <div>Hi, {currentUser.fullName.split(" ")[0]} 👋</div>
               <div onClick={() => { onNavigate("orders"); setMenuOpen(false); }}>
                 <FiUser className="icon" /> My Orders
               </div>
+              {currentUser.isAdmin && (
+                <div onClick={() => { onNavigate("admin"); setMenuOpen(false); }}>
+                  <FiSettings className="icon" /> Admin Panel
+                </div>
+              )}
               <div
                 onClick={() => {
                   setMenuOpen(false);

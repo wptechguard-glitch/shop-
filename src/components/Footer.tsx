@@ -20,7 +20,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="footer-newsletter">
         <div className="footer-newsletter-inner">
           <div>
-            <h3>Join the ShopKart Circle</h3>
+            <h3>Join the Gaurangi Circle</h3>
             <p>Be first to know about new arrivals, exclusive collections & private sales.</p>
           </div>
           <form
@@ -79,7 +79,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="footer-divider" />
 
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} ShopKart. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Gaurangi. All rights reserved.</p>
         <div className="footer-bottom-links">
           <span>Privacy Policy</span>
           <span>Terms of Service</span>

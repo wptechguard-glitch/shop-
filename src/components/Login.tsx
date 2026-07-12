@@ -183,7 +183,7 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
         <span className="brand-badge">TRADITIONAL WEAR</span>
         <h1>
           Welcome to<br />
-          <span>ShopKart</span>
+          <span>Gaurangi</span>
         </h1>
         <p>
           Your destination for premium ethnic wear, traditional salwar
@@ -212,7 +212,7 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
           </span>
 
           <h2>Welcome Back</h2>
-          <p className="auth-sub font-premium">Sign in to your ShopKart account</p>
+          <p className="auth-sub font-premium">Sign in to your Gaurangi account</p>
 
           {/* LOGIN METHOD TOGGLE TABS */}
           <div className="auth-method-toggle">
@@ -349,7 +349,7 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
           </form>
 
           <p className="auth-switch">
-            New to ShopKart? <span onClick={() => onNavigate("register")}>Create Account</span>
+            New to Gaurangi? <span onClick={() => onNavigate("register")}>Create Account</span>
           </p>
         </div>
       </div>

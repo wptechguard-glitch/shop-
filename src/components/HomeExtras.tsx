@@ -9,7 +9,7 @@ export const BrandStory: React.FC = () => {
           <span className="section-tagline">OUR HERITAGE</span>
           <h2 className="section-title-left">Crafting Elegance Since 2018</h2>
           <p className="brand-story-text">
-            Every thread woven at ShopKart tells a story of unmatched dedication,
+            Every thread woven at Gaurangi tells a story of unmatched dedication,
             heritage prints, and the timeless artistry of Indian craftsmen. We bring
             you hand-selected designer wear crafted from premium cotton, luxurious
             muslin, and authentic linen — for both women and men.
@@ -144,7 +144,7 @@ export const InstagramFeed: React.FC = () => {
       <div className="instagram-header">
         <FiInstagram size={22} color="#c9a24b" />
         <h3>Follow Us on Instagram</h3>
-        <p>@ShopKart_Ethnic</p>
+        <p>@Gaurangi_Ethnic</p>
       </div>
       <div className="instagram-grid">
         {feedImages.map((img, idx) => (

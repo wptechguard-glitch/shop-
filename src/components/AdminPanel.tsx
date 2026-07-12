@@ -7,7 +7,7 @@ import {
 import { API_BASE_URL } from "../api";
 import type { Product } from "../data/products";
 
-const ADMIN_SECRET = "shopkart_admin_2024_secure";
+const ADMIN_SECRET = "gaurangi_admin_2024_secure";
 
 interface AdminOrder {
   _id: string;
@@ -66,7 +66,7 @@ const AdminLogin: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
       <div className="admin-login-card">
         <div className="admin-login-logo">
           <FiShoppingBag size={32} color="#c9a24b" />
-          <h1>ShopKart <span>Admin</span></h1>
+          <h1>Gaurangi <span>Admin</span></h1>
         </div>
         <p className="admin-login-sub">Secure Admin Panel — Staff Only</p>
 
@@ -227,7 +227,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       inStock: effectiveInStock,
       stockQuantity: totalQty,
       sizes: sizesArray,
-      images: validImages.length > 0 ? validImages : ["https://via.placeholder.com/300x380?text=ShopKart"],
+      images: validImages.length > 0 ? validImages : ["https://via.placeholder.com/300x380?text=Gaurangi"],
       rating: 4.0
     };
 
@@ -422,7 +422,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
         <div className="admin-header-left">
           <FiShoppingBag size={22} color="#c9a24b" />
           <div>
-            <h1>ShopKart Admin</h1>
+            <h1>Gaurangi Admin</h1>
             <p>{activeTab === "orders" ? "Order Management Panel" : "Inventory & Products Panel"}</p>
           </div>
         </div>

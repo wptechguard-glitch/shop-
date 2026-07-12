@@ -22,7 +22,7 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({ orderId, totalAmount, payme
       <div className="order-success-card">
         <FiCheckCircle className="success-icon" />
         <h2>Order Placed Successfully!</h2>
-        <p className="auth-sub">Thank you for shopping with ShopKart. Your order is being processed.</p>
+        <p className="auth-sub">Thank you for shopping with Gaurangi. Your order is being processed.</p>
 
         <div className="order-success-details">
           <div className="order-detail-row">
