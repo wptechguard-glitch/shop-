@@ -18,107 +18,58 @@ interface NavbarProps {
 }
 
 const GaurangiLogo: React.FC = () => (
-  <svg
-    viewBox="0 0 100 100"
-    className="navbar-logo-svg"
-    style={{
-      width: "40px",
-      height: "40px",
-      display: "block",
-      flexShrink: 0
-    }}
-  >
+  <svg viewBox="0 0 100 120" style={{ width: "42px", height: "50px", display: "block", flexShrink: 0 }}>
     <defs>
-      {/* Lotus Petals Gradient */}
-      <linearGradient id="lotusPetalGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="#800a2a" />
-        <stop offset="60%" stopColor="#b83b5e" />
-        <stop offset="100%" stopColor="#e84a5f" />
+      <linearGradient id="ng1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%"   stopColor="#ffe47a" />
+        <stop offset="35%"  stopColor="#d4a832" />
+        <stop offset="70%"  stopColor="#b8860b" />
+        <stop offset="100%" stopColor="#8b6008" />
       </linearGradient>
-      
-      {/* Central Profile Silhouette Golden Gradient */}
-      <linearGradient id="goldenFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#ffe066" />
-        <stop offset="50%" stopColor="#f5b041" />
-        <stop offset="100%" stopColor="#d35400" />
+      <linearGradient id="ng2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%"   stopColor="#fff0a0" />
+        <stop offset="50%"  stopColor="#c9a24b" />
+        <stop offset="100%" stopColor="#7a5000" />
       </linearGradient>
+      <linearGradient id="ntxt" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stopColor="#ffe07a" />
+        <stop offset="50%"  stopColor="#c9a24b" />
+        <stop offset="100%" stopColor="#9a7010" />
+      </linearGradient>
+      <filter id="nsh">
+        <feDropShadow dx="0" dy="1.5" stdDeviation="1.8" floodColor="#60400888" />
+      </filter>
+      <filter id="nglow">
+        <feGaussianBlur stdDeviation="1.2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
     </defs>
-
-    {/* Outer background/glow shadow */}
-    <circle cx="50" cy="50" r="46" fill="#fff9f5" stroke="#f0e2d5" strokeWidth="1.5" />
-
-    {/* Lotus Petal Back Left */}
-    <path
-      d="M 50 82 C 30 75 16 55 24 38 C 29 28 44 38 50 52"
-      fill="url(#lotusPetalGrad)"
-      opacity="0.85"
-    />
-
-    {/* Lotus Petal Back Right */}
-    <path
-      d="M 50 82 C 70 75 84 55 76 38 C 71 28 56 38 50 52"
-      fill="url(#lotusPetalGrad)"
-      opacity="0.85"
-    />
-
-    {/* Lotus Petal Middle Left */}
-    <path
-      d="M 50 85 C 22 76 10 50 14 36 C 18 22 36 34 50 48"
-      fill="url(#lotusPetalGrad)"
-    />
-
-    {/* Lotus Petal Middle Right */}
-    <path
-      d="M 50 85 C 78 76 90 50 86 36 C 82 22 64 34 50 48"
-      fill="url(#lotusPetalGrad)"
-    />
-
-    {/* Lotus Petal Outer Left Wing */}
-    <path
-      d="M 50 85 C 20 85 4 72 6 56 C 8 42 26 48 38 60"
-      fill="url(#lotusPetalGrad)"
-      opacity="0.9"
-    />
-
-    {/* Lotus Petal Outer Right Wing */}
-    <path
-      d="M 50 85 C 80 85 96 72 94 56 C 92 42 74 48 62 60"
-      fill="url(#lotusPetalGrad)"
-      opacity="0.9"
-    />
-
-    {/* Lotus Petal Center Bud/Frame */}
-    <path
-      d="M 50 88 C 32 75 32 45 48 30 C 49 28 51 28 52 30 C 68 45 68 75 50 88 Z"
-      fill="url(#lotusPetalGrad)"
-    />
-
-    {/* Central Flame Leaf in Gold */}
-    <path
-      d="M 50 22 C 34 38 34 66 50 82 C 66 66 66 38 50 22 Z"
-      fill="url(#goldenFaceGrad)"
-    />
-
-    {/* Elegant Woman's Profile Silhouette in Maroon, facing right */}
-    <path
-      d="M 45,35 
-         C 47,35 48.5,37 49,39 
-         C 49.5,41 51.5,42.5 54,43 
-         L 55,43.5 
-         L 51.5,45.5 
-         C 52.5,46.5 52.5,47 52,47.5 
-         C 51.2,48 50.2,48 49.8,48.5 
-         C 50.8,49 51.2,49.5 50.2,50.5 
-         C 49.2,51.5 48,52 47.5,54 
-         C 47,56 48,59 49,63 
-         C 46,63 44,61.5 43.5,58.5 
-         C 42.5,53.5 43,48.5 44,43.5 
-         C 41.5,39.5 40.5,35.5 42.5,33.5 
-         C 43.5,32.5 45,34 45,35 Z"
-      fill="#800a2a"
-    />
+    {/* Bag body */}
+    <rect x="8" y="26" width="84" height="68" rx="10" ry="10" fill="url(#ng1)" filter="url(#nsh)" />
+    <rect x="11" y="29" width="78" height="62" rx="8" ry="8" fill="none" stroke="rgba(255,255,200,0.2)" strokeWidth="1.5"/>
+    {/* Bag handle */}
+    <path d="M 30 26 Q 30 4 50 4 Q 70 4 70 26" fill="none" stroke="url(#ng2)" strokeWidth="9" strokeLinecap="round"/>
+    <path d="M 33 26 Q 33 8 50 8 Q 67 8 67 26" fill="none" stroke="rgba(255,245,160,0.3)" strokeWidth="3" strokeLinecap="round"/>
+    {/* G letter shadow */}
+    <path d="M 66 46 A 20 20 0 1 0 66 76 L 66 64 L 53 64 L 53 70 L 60 70 A 12 12 0 1 1 60 52 L 66 52 Z" fill="rgba(0,0,0,0.18)" transform="translate(1,1)" />
+    {/* G letter */}
+    <path d="M 66 46 A 20 20 0 1 0 66 76 L 66 64 L 53 64 L 53 70 L 60 70 A 12 12 0 1 1 60 52 L 66 52 Z" fill="rgba(255,245,185,0.90)" filter="url(#nglow)" />
+    {/* Hair flowing back */}
+    <path d="M 36 56 Q 28 46 32 38 Q 36 30 44 31 Q 51 30 54 38" fill="url(#ng2)" opacity="0.92"/>
+    {/* Face oval */}
+    <ellipse cx="43" cy="60" rx="7" ry="9.5" fill="url(#ng1)" opacity="0.88"/>
+    {/* Chin */}
+    <path d="M 36 64 Q 37 72 43 74 Q 49 72 50 64" fill="url(#ng1)" opacity="0.70"/>
+    {/* Hair strand right */}
+    <path d="M 54 38 Q 59 46 56 57 Q 54 63 53 70" fill="url(#ng2)" opacity="0.80"/>
+    {/* Shine on bag */}
+    <ellipse cx="28" cy="42" rx="10" ry="5" fill="rgba(255,255,210,0.13)" transform="rotate(-18,28,42)"/>
+    {/* GAURANGI text */}
+    <text x="50" y="113" textAnchor="middle" fontFamily="Georgia, serif" fontSize="10.5" fontWeight="700" letterSpacing="3" fill="url(#ntxt)" filter="url(#nsh)">GAURANGI</text>
   </svg>
 );
+
+
 
 const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, currentUser, onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
