@@ -29,9 +29,9 @@ const CartPage: React.FC<CartPageProps> = ({ products, cart, onIncrement, onDecr
     return (
       <div className="empty-state">
         <FiShoppingBag className="empty-icon" />
-        <h3>Cart khali hai</h3>
-        <p>Kuch kurtis add karo shopping shuru karne ke liye</p>
-        <button className="continue-btn" onClick={() => onNavigate("home")}>Shopping Shuru Karo</button>
+        <h3>Your Cart is Empty</h3>
+        <p>Add some beautiful kurtis to start shopping!</p>
+        <button className="continue-btn" onClick={() => onNavigate("home")}>Start Shopping</button>
       </div>
     );
   }

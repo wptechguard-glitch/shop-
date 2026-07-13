@@ -25,26 +25,26 @@ const GaurangiLogo: React.FC<GaurangiLogoProps> = ({
       style={{ display: "block", flexShrink: 0 }}
     >
       <defs>
-        {/* Main gold gradient */}
+        {/* Main purple/violet gradient */}
         <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stopColor="#f5d87a" />
-          <stop offset="30%"  stopColor="#d4a017" />
-          <stop offset="60%"  stopColor="#c9860a" />
-          <stop offset="100%" stopColor="#a0640a" />
+          <stop offset="0%"   stopColor="#b8a0d4" />
+          <stop offset="35%"  stopColor="#9b72cf" />
+          <stop offset="70%"  stopColor="#7b4fa8" />
+          <stop offset="100%" stopColor="#4a2e7a" />
         </linearGradient>
 
         {/* Bright highlight gradient for ribbon/handle */}
         <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stopColor="#ffe07a" />
-          <stop offset="50%"  stopColor="#c9a24b" />
-          <stop offset="100%" stopColor="#8b6010" />
+          <stop offset="0%"   stopColor="#ffe47a" />
+          <stop offset="50%"  stopColor="#b8a0d4" />
+          <stop offset="100%" stopColor="#5a3a8c" />
         </linearGradient>
 
         {/* Text gradient */}
         <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%"   stopColor="#ffe07a" />
-          <stop offset="50%"  stopColor="#c9a24b" />
-          <stop offset="100%" stopColor="#a07820" />
+          <stop offset="0%"   stopColor="#ffe47a" />
+          <stop offset="50%"  stopColor="#b8a0d4" />
+          <stop offset="100%" stopColor="#ffe47a" />
         </linearGradient>
 
         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -56,7 +56,7 @@ const GaurangiLogo: React.FC<GaurangiLogoProps> = ({
         </filter>
 
         <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#80600888" />
+          <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#1a0d2e88" />
         </filter>
       </defs>
 
@@ -108,7 +108,7 @@ const GaurangiLogo: React.FC<GaurangiLogoProps> = ({
            A 22 22 0 1 0 68 78
            L 68 65 L 54 65 L 54 72 L 62 72
            A 14 14 0 1 1 62 56 L 68 56 Z"
-        fill="rgba(255,240,180,0.92)"
+        fill="rgba(255, 255, 255, 0.95)"
         filter="url(#glow)"
       />
 

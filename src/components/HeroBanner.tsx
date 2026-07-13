@@ -17,7 +17,7 @@ const slides: Slide[] = [
     subtitle: "Premium Kurtis & Anarkalis crafted from handpicked fabrics",
     cta: "Shop Women's",
     image: "/images/kurti-maroon.jpg",
-    accent: "#c9a24b",
+    accent: "#b8a0d4",
   },
   {
     tag: "Trending Now",
@@ -25,7 +25,7 @@ const slides: Slide[] = [
     subtitle: "Classic cuts. Premium cotton. Made for every occasion.",
     cta: "Shop Men's",
     image: "/images/men-kurta.jpg",
-    accent: "#3a5a8c",
+    accent: "#5a3a8c",
   },
   {
     tag: "Festive Season",
@@ -33,7 +33,7 @@ const slides: Slide[] = [
     subtitle: "Designer pieces for weddings, festivities and celebrations",
     cta: "View Collection",
     image: "/images/kurti-peach.jpg",
-    accent: "#c9a24b",
+    accent: "#b8a0d4",
   },
 ];
 

@@ -18,8 +18,8 @@ const Wishlist: React.FC<WishlistProps> = ({ products, wishlist, onAddToCart, on
     return (
       <div className="empty-state">
         <FiHeart className="empty-icon" />
-        <h3>Wishlist khali hai</h3>
-        <p>Jo kurti pasand aaye, uspe heart icon dabao</p>
+        <h3>Your Wishlist is Empty</h3>
+        <p>Tap the heart icon on any kurti you love to save it here</p>
       </div>
     );
   }

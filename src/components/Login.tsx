@@ -73,7 +73,7 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
     }
 
     // Noise lines
-    const lineColors = ["#b5895a", "#3a5a8c", "#a33", "#2a7a4f", "#7a4a9a"];
+    const lineColors = ["#b5895a", "#5a3a8c", "#a33", "#2a7a4f", "#7a4a9a"];
     for (let i = 0; i < 5; i++) {
       ctx.beginPath();
       ctx.moveTo(Math.random() * W, Math.random() * H);
@@ -367,7 +367,7 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
                 <canvas
                   ref={canvasRef}
                   className="captcha-canvas"
-                  style={{ display: "block", borderRadius: 8, border: "1.5px solid #c9a24b" }}
+                  style={{ display: "block", borderRadius: 8, border: "1.5px solid #b8a0d4" }}
                 />
                 <button type="button" className="captcha-refresh-btn" onClick={refreshCaptcha} title="Refresh captcha">
                   <FiRefreshCw />

@@ -41,7 +41,7 @@ interface AdminPanelProps {
 }
 
 const statusConfig = {
-  Processing: { color: "#d4a017", bg: "#faf3e7", label: "Processing", icon: <FiClock size={13}/> },
+  Processing: { color: "#9b72cf", bg: "#faf3e7", label: "Processing", icon: <FiClock size={13}/> },
   Shipped:    { color: "#3a7bd5", bg: "#e3edf7", label: "Shipped",    icon: <FiTruck size={13}/> },
   Delivered:  { color: "#34a853", bg: "#e5f2e9", label: "Delivered",  icon: <FiCheck size={13}/> },
 };
@@ -65,7 +65,7 @@ const AdminLogin: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     <div className="admin-login-wrap">
       <div className="admin-login-card">
         <div className="admin-login-logo">
-          <FiShoppingBag size={32} color="#c9a24b" />
+          <FiShoppingBag size={32} color="#b8a0d4" />
           <h1>Gaurangi <span>Admin</span></h1>
         </div>
         <p className="admin-login-sub">Secure Admin Panel — Staff Only</p>
@@ -420,7 +420,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
       {/* ── Header ── */}
       <div className="admin-header">
         <div className="admin-header-left">
-          <FiShoppingBag size={22} color="#c9a24b" />
+          <FiShoppingBag size={22} color="#b8a0d4" />
           <div>
             <h1>Gaurangi Admin</h1>
             <p>{activeTab === "orders" ? "Order Management Panel" : "Inventory & Products Panel"}</p>
@@ -576,7 +576,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                           }
                         }}
                       />
-                      <span style={{ color: prodInStock ? "#2f7a4f" : "#c0392b", fontWeight: 700 }}>
+                      <span style={{ color: prodInStock ? "#5a3a8c" : "#c0392b", fontWeight: 700 }}>
                         {prodInStock ? "In Stock" : "Out of Stock"}
                       </span>
                     </label>
@@ -636,10 +636,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
         {/* ── Stats Dashboard ── */}
         {stats && activeTab === "orders" && (
           <div className="admin-stats-grid">
-            <StatCard icon={<FiShoppingBag size={20}/>} label="Total Orders"   value={stats.totalOrders}          color="#14213d" bg="#eef1f7"/>
+            <StatCard icon={<FiShoppingBag size={20}/>} label="Total Orders"   value={stats.totalOrders}          color="#2d1b4e" bg="#eef1f7"/>
             <StatCard icon={<FiUsers size={20}/>}       label="Total Users"    value={stats.totalUsers}           color="#3a7bd5" bg="#e3edf7"/>
             <StatCard icon={<FiTrendingUp size={20}/>}  label="Total Revenue"  value={`₹${stats.totalRevenue}`}  color="#34a853" bg="#e5f2e9"/>
-            <StatCard icon={<FiClock size={20}/>}       label="Processing"     value={stats.processing}           color="#d4a017" bg="#faf3e7"/>
+            <StatCard icon={<FiClock size={20}/>}       label="Processing"     value={stats.processing}           color="#9b72cf" bg="#faf3e7"/>
             <StatCard icon={<FiTruck size={20}/>}       label="Shipped"        value={stats.shipped}              color="#3a7bd5" bg="#e3edf7"/>
             <StatCard icon={<FiCheck size={20}/>}       label="Delivered"      value={stats.delivered}            color="#34a853" bg="#e5f2e9"/>
           </div>
@@ -679,7 +679,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
             <div className="admin-orders-wrap">
               {loading && orders.length === 0 ? (
                 <div className="admin-loading">
-                  <FiRefreshCw size={28} className="spinning" color="#14213d" />
+                  <FiRefreshCw size={28} className="spinning" color="#2d1b4e" />
                   <p>Loading orders...</p>
                 </div>
               ) : filteredOrders.length === 0 ? (
@@ -801,7 +801,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                 {products.length === 0 && (
                   <button
                     className="admin-refresh-btn"
-                    style={{ background: "#2f7a4f", color: "white", border: "none" }}
+                    style={{ background: "#5a3a8c", color: "white", border: "none" }}
                     onClick={async () => {
                       if (!window.confirm("Seed default products into MongoDB? (Only runs if DB is empty)")) return;
                       try {

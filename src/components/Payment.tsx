@@ -104,7 +104,7 @@ const Payment: React.FC<PaymentProps> = ({
           name: "Gaurangi",
           description: "Ethnic Wear Shopping Checkout",
           order_id: orderData.orderId,
-          theme: { color: "#14213d" }, // Dark premium navy theme color
+          theme: { color: "#2d1b4e" }, // Dark premium navy theme color
           prefill: {
             name: address?.fullName || "",
             email: "",

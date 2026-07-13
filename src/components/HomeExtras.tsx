@@ -142,7 +142,7 @@ export const InstagramFeed: React.FC = () => {
   return (
     <div className="section-block instagram-section">
       <div className="instagram-header">
-        <FiInstagram size={22} color="#c9a24b" />
+        <FiInstagram size={22} color="#b8a0d4" />
         <h3>Follow Us on Instagram</h3>
         <p>@Gaurangi_Ethnic</p>
       </div>
@@ -176,7 +176,7 @@ export const Newsletter: React.FC = () => {
     <div className="newsletter-banner">
       <div className="newsletter-overlay" />
       <div className="newsletter-content">
-        <FiMail size={32} color="#c9a24b" className="newsletter-mail-icon" />
+        <FiMail size={32} color="#b8a0d4" className="newsletter-mail-icon" />
         <h2>Get 15% Off Your First Order</h2>
         <p>Subscribe to receive updates on new collections, private sales, and special offers.</p>
 

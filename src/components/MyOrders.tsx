@@ -10,9 +10,9 @@ interface MyOrdersProps {
 const statusSteps = ["Processing", "Shipped", "Delivered"];
 
 const statusColors: Record<string, { bg: string; text: string; dot: string }> = {
-  Processing: { bg: "#faf3e7", text: "#9a7423", dot: "#d4a017" },
+  Processing: { bg: "#faf3e7", text: "#9a7423", dot: "#9b72cf" },
   Shipped:    { bg: "#e3edf7", text: "#2f5a8f", dot: "#3a7bd5" },
-  Delivered:  { bg: "#e5f2e9", text: "#2f7a4f", dot: "#34a853" },
+  Delivered:  { bg: "#e5f2e9", text: "#5a3a8c", dot: "#34a853" },
 };
 
 // ─── ORDER DETAIL VIEW ────────────────────────────────────────────
