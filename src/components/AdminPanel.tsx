@@ -7,7 +7,7 @@ import {
 import { API_BASE_URL } from "../api";
 import type { Product } from "../data/products";
 
-const ADMIN_SECRET = "gaurangi_admin_2024_secure";
+const ADMIN_SECRET = "shopkart_admin_2024_secure";
 
 interface AdminOrder {
   _id: string;
@@ -38,6 +38,7 @@ interface AdminPanelProps {
   onNavigate: (page: string) => void;
   products: Product[];
   onRefreshProducts: () => void;
+  currentUser?: any;
 }
 
 const statusConfig = {
@@ -108,9 +109,10 @@ const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string |
 );
 
 // ─── MAIN ADMIN PANEL ─────────────────────────────────────
-const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefreshProducts }) => {
+const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefreshProducts, currentUser }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    () => sessionStorage.getItem("admin_auth") === "true"
+    () => sessionStorage.getItem("admin_auth") === "true" || 
+          currentUser?.email?.toLowerCase() === "gaurngi@gmail.com"
   );
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);

@@ -43,6 +43,7 @@ export interface AuthUser {
   id: string;
   fullName: string;
   email: string;
+  isAdmin?: boolean;
 }
 
 const App: React.FC = () => {
@@ -116,7 +117,9 @@ const App: React.FC = () => {
     const savedUser = localStorage.getItem("gaurangi_user");
     if (savedToken && savedUser) {
       setAuthToken(savedToken);
-      setCurrentUser(JSON.parse(savedUser));
+      const parsedUser = JSON.parse(savedUser);
+      const isUserAdmin = parsedUser.email?.toLowerCase() === "gaurngi@gmail.com";
+      setCurrentUser({ ...parsedUser, isAdmin: isUserAdmin });
     }
   }, []);
 
@@ -156,10 +159,12 @@ const App: React.FC = () => {
   }, [authToken]);
 
   const handleLoginSuccess = (token: string, user: AuthUser) => {
+    const isUserAdmin = user.email?.toLowerCase() === "gaurngi@gmail.com";
+    const updatedUser = { ...user, isAdmin: isUserAdmin };
     setAuthToken(token);
-    setCurrentUser(user);
+    setCurrentUser(updatedUser);
     localStorage.setItem("gaurangi_token", token);
-    localStorage.setItem("gaurangi_user", JSON.stringify(user));
+    localStorage.setItem("gaurangi_user", JSON.stringify(updatedUser));
   };
 
   const handleLogout = () => {
