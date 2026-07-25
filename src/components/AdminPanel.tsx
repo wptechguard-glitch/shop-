@@ -6,6 +6,7 @@ import {
 } from "react-icons/fi";
 import { API_BASE_URL } from "../api";
 import type { Product } from "../data/products";
+import placeholderImg from "../assets/placeholder.svg";
 
 const ADMIN_SECRET = "shopkart_admin_2024_secure";
 
@@ -611,7 +612,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                                 alt="preview" 
                                 onError={(e) => { 
                                   e.currentTarget.onerror = null; 
-                                  e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"; 
+                                  e.currentTarget.src = placeholderImg; 
                                 }} 
                               />
                             </div>
@@ -856,12 +857,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                           <tr key={String(dbId)}>
                             <td>
                               <img 
-                                src={p.images[0] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"} 
+                                src={p.images[0] || placeholderImg} 
                                 alt={p.name}
                                 className="admin-prod-thumb"
                                 onError={(e) => { 
                                   e.currentTarget.onerror = null; 
-                                  e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=80&q=80"; 
+                                  e.currentTarget.src = placeholderImg; 
                                 }}
                               />
                             </td>

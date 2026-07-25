@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import type { Product } from "../data/products";
+import placeholderImg from "../assets/placeholder.svg";
 import "../index.css";
 
 interface ProductCardProps {
@@ -35,12 +36,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         <img
-          src={product.images[activeImg] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=300&q=80"}
+          src={product.images[activeImg] || placeholderImg}
           alt={product.name}
           className={`product-image ${outOfStock ? "dimmed" : ""}`}
           onError={(e) => {
             e.currentTarget.onerror = null;
-            e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=300&q=80";
+            e.currentTarget.src = placeholderImg;
           }}
         />
 

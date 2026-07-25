@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiHeart, FiShoppingCart, FiChevronLeft, FiTruck, FiRefreshCw, FiShield } from "react-icons/fi";
 import type { Product } from "../data/products";
+import placeholderImg from "../assets/placeholder.svg";
 import ProductCard from "./ProductCart";
 
 interface ProductDetailProps {
@@ -80,11 +81,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
               </div>
             )}
             <img
-              src={product.images[activeImg] || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&q=80"}
+              src={product.images[activeImg] || placeholderImg}
               alt={product.name}
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&q=80";
+                e.currentTarget.src = placeholderImg;
               }}
             />
           </div>
@@ -96,11 +97,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                 onClick={() => setActiveImg(idx)}
               >
                 <img 
-                  src={img || "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=100&q=80"} 
+                  src={img || placeholderImg} 
                   alt="" 
                   onError={(e) => {
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=100&q=80";
+                    e.currentTarget.src = placeholderImg;
                   }}
                 />
               </div>

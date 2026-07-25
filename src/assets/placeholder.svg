@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="placeholderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5f6" />
+      <stop offset="100%" stop-color="#fee2e7" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#placeholderGrad)" />
+  <g transform="translate(100, 80)" stroke="#ec4899" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Hanger Hook -->
+    <path d="M 100 100 C 100 80, 120 70, 110 50 C 100 30, 80 40, 85 60 C 85 70, 100 80, 100 100" />
+    <!-- Hanger Shoulders -->
+    <path d="M 100 100 L 20 130 C 10 132, 10 138, 20 140 C 50 145, 150 145, 180 140 C 190 138, 190 132, 180 130 Z" />
+    <!-- Dress / Kurti Silhouette -->
+    <path d="M 50 138 L 40 220 L 70 230 L 60 380 L 140 380 L 130 230 L 160 220 L 150 138" fill="#fbcfe8" fill-opacity="0.4" stroke="#db2777" stroke-width="4"/>
+    <!-- Neckline design -->
+    <path d="M 85 138 C 85 155, 115 155, 115 138" stroke="#db2777" stroke-width="3"/>
+    <!-- Elegant flower or motif print in the middle -->
+    <circle cx="100" cy="200" r="10" fill="#ec4899" fill-opacity="0.8" stroke="none"/>
+    <circle cx="100" cy="230" r="8" fill="#ec4899" fill-opacity="0.8" stroke="none"/>
+    <circle cx="100" cy="260" r="8" fill="#ec4899" fill-opacity="0.8" stroke="none"/>
+  </g>
+  <text x="50%" y="82%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#db2777">Gaurangi Ethnic Wear</text>
+  <text x="50%" y="89%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#f472b6">Image Preview Unavailable</text>
+</svg>
