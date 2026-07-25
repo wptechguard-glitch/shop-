@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiHeart, FiShoppingCart, FiChevronLeft, FiTruck, FiRefreshCw, FiShield } from "react-icons/fi";
+import { FiHeart, FiShoppingCart, FiChevronLeft, FiChevronRight, FiTruck, FiRefreshCw, FiShield } from "react-icons/fi";
 import type { Product } from "../data/products";
 import placeholderImg from "../assets/placeholder.svg";
 import ProductCard from "./ProductCart";
@@ -25,6 +25,48 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 }) => {
   const product = products.find((p) => String(p.id) === String(productId));
   const [activeImg, setActiveImg] = useState(0);
+
+  // Touch Swipe Gesture State & Handlers
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd || !product) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setActiveImg((prev) => (prev + 1) % product.images.length);
+    } else if (isRightSwipe) {
+      setActiveImg((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
+
+  const handlePrevImg = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (product) {
+      setActiveImg((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
+
+  const handleNextImg = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (product) {
+      setActiveImg((prev) => (prev + 1) % product.images.length);
+    }
+  };
+
   const sizeStockMap = product && product.sizes && Array.isArray(product.sizes)
     ? product.sizes.reduce((acc, s) => {
         acc[s.size] = s.quantity;
@@ -74,7 +116,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 
       <div className="product-detail-main">
         <div className="detail-gallery">
-          <div className="detail-main-img" style={{ position: "relative" }}>
+          <div 
+            className="detail-main-img" 
+            style={{ position: "relative" }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             {isOutOfStock && (
               <div className="out-of-stock-overlay detail-image-out-overlay">
                 Out of Stock
@@ -88,6 +136,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                 e.currentTarget.src = placeholderImg;
               }}
             />
+            {product.images && product.images.length > 1 && (
+              <>
+                <button type="button" className="carousel-arrow prev" onClick={handlePrevImg} aria-label="Previous image">
+                  <FiChevronLeft />
+                </button>
+                <button type="button" className="carousel-arrow next" onClick={handleNextImg} aria-label="Next image">
+                  <FiChevronRight />
+                </button>
+              </>
+            )}
           </div>
           <div className="detail-thumb-row">
             {product.images.map((img, idx) => (
