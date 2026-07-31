@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft, FiPhone, FiShield, FiRefreshCw } from "react-icons/fi";
+import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft, FiRefreshCw } from "react-icons/fi";
 import { API_BASE_URL } from "../api";
 import "../index.css";
 
@@ -17,19 +17,12 @@ function makeCaptchaText(len = 5) {
 }
 
 const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
-  const [loginMethod, setLoginMethod] = useState<"password" | "otp">("password");
-  
   // Credentials states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
   
   // View states
   const [showPassword, setShowPassword] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [sendingOtp, setSendingOtp] = useState(false);
-  const [otpMessage, setOtpMessage] = useState("");
   
   // Captcha states
   const [captchaText, setCaptchaText] = useState(() => makeCaptchaText());
@@ -122,51 +115,12 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
     setCaptchaInput("");
   };
 
-  // ── Send OTP ──────────────────────────────────────────────────────────────
-  const handleSendOtp = async () => {
-    if (!phone || phone.length !== 10) {
-      setError("Please enter a valid 10-digit phone number");
-      return;
-    }
-
-    setError("");
-    setSendingOtp(true);
-    setOtpMessage("");
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Failed to send OTP. Please try again.");
-        return;
-      }
-
-      setOtpSent(true);
-      setOtpMessage("✅ OTP sent! Check your phone.");
-    } catch {
-      setError("Network error: Unable to connect to server.");
-    } finally {
-      setSendingOtp(false);
-    }
-  };
-
   // ── Submit ─────────────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (loginMethod === "password" && (!email || !password)) {
+    if (!email || !password) {
       setError("Please enter both email and password");
-      return;
-    }
-
-    if (loginMethod === "otp" && (!phone || !otp)) {
-      setError("Please verify phone number and OTP code");
       return;
     }
 
@@ -185,15 +139,16 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
     setError("");
     setLoading(true);
 
-    const payload = loginMethod === "password" 
-      ? { email, password, captchaToken: "frontend-validated", captchaInput: captchaText }
-      : { phone, otp, captchaToken: "frontend-validated", captchaInput: captchaText };
-
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          email,
+          password,
+          captchaToken: "frontend-validated",
+          captchaInput: captchaText,
+        }),
       });
 
       const data = await response.json();
@@ -253,112 +208,39 @@ const Login: React.FC<LoginProps> = ({ onNavigate, onLoginSuccess }) => {
           <h2>Welcome Back</h2>
           <p className="auth-sub font-premium">Sign in to your Gaurangi account</p>
 
-          {/* LOGIN METHOD TOGGLE TABS */}
-          <div className="auth-method-toggle">
-            <button
-              type="button"
-              className={loginMethod === "password" ? "auth-toggle-tab active" : "auth-toggle-tab"}
-              onClick={() => {
-                setLoginMethod("password");
-                setError("");
-              }}
-            >
-              Password
-            </button>
-            <button
-              type="button"
-              className={loginMethod === "otp" ? "auth-toggle-tab active" : "auth-toggle-tab"}
-              onClick={() => {
-                setLoginMethod("otp");
-                setError("");
-              }}
-            >
-              OTP Login
-            </button>
-          </div>
-
           <form onSubmit={handleSubmit}>
-            {loginMethod === "password" ? (
-              <>
-                <label className="field-label">Email Address</label>
-                <div className="input-group">
-                  <FiMail className="input-icon" />
-                  <input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+            <label className="field-label">Email Address</label>
+            <div className="input-group">
+              <FiMail className="input-icon" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-                <div className="label-row">
-                  <label className="field-label">Password</label>
-                  <span className="forgot-link">Forgot password?</span>
-                </div>
-                <div className="input-group">
-                  <FiLock className="input-icon" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <span
-                    className="input-icon-right"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
-                  </span>
-                </div>
-              </>
-            ) : (
-              <>
-                <label className="field-label">Phone Number</label>
-                <div className="phone-otp-row">
-                  <div className="input-group flex-1">
-                    <FiPhone className="input-icon" />
-                    <input
-                      type="tel"
-                      placeholder="10-digit number"
-                      maxLength={10}
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                      disabled={otpSent}
-                      required
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className="otp-send-btn"
-                    onClick={handleSendOtp}
-                    disabled={sendingOtp || !phone || phone.length !== 10}
-                  >
-                    {sendingOtp ? "Sending..." : otpSent ? "Resend" : "Send OTP"}
-                  </button>
-                </div>
-
-                {otpMessage && <p className="otp-status-success">{otpMessage}</p>}
-
-                {otpSent && (
-                  <>
-                    <label className="field-label">SMS Verification Code</label>
-                    <div className="input-group slide-in">
-                      <FiShield className="input-icon" />
-                      <input
-                        type="text"
-                        placeholder="Enter 6-digit OTP"
-                        maxLength={6}
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                        required
-                      />
-                    </div>
-                  </>
-                )}
-              </>
-            )}
+            <div className="label-row">
+              <label className="field-label">Password</label>
+              <span className="forgot-link">Forgot password?</span>
+            </div>
+            <div className="input-group">
+              <FiLock className="input-icon" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span
+                className="input-icon-right"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </span>
+            </div>
 
             {/* CAPTCHA SECTION — 100% Frontend, no backend needed */}
             <div className="captcha-section">

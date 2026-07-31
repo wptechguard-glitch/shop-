@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiSearch, FiMenu, FiHeart, FiShoppingCart, FiHome, FiGrid, FiUser, FiX, FiLogOut, FiSettings } from "react-icons/fi";
 import GaurangiLogo from "./GaurangiLogo";
 import "../index.css";
@@ -16,24 +16,41 @@ interface NavbarProps {
   onNavigate: (page: string) => void;
   currentUser?: AuthUser | null;
   onLogout?: () => void;
+  currentPage?: string;
 }
 
 // GaurangiLogo is now imported from its own file component
 
 
 
-const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, currentUser, onLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ cartCount, wishlistCount, onNavigate, currentUser, onLogout, currentPage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     onNavigate(`search:${searchText}`);
   };
 
+  const isHome = currentPage === "home";
+  const navbarClasses = [
+    "navbar",
+    isHome ? "navbar--home" : "",
+    isHome && !scrolled ? "navbar--transparent" : "navbar--scrolled"
+  ].filter(Boolean).join(" ");
+
   return (
-    <nav className="navbar">
+    <nav className={navbarClasses}>
       <div className="navbar-top">
         {/* Logo SVG + Brand Name */}
         <div className="store-name" onClick={() => onNavigate("home")}>

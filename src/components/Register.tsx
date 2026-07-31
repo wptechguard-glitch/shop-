@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { FiUser, FiMail, FiLock, FiPhone, FiArrowLeft, FiShield, FiRefreshCw } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiPhone, FiArrowLeft, FiRefreshCw } from "react-icons/fi";
 import { API_BASE_URL } from "../api";
 import "../index.css";
 
@@ -22,12 +22,7 @@ const Register: React.FC<RegisterProps> = ({ onNavigate, onLoginSuccess }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otp, setOtp] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
-
-  const [otpSent, setOtpSent] = useState(false);
-  const [sendingOtp, setSendingOtp] = useState(false);
-  const [otpMessage, setOtpMessage] = useState("");
 
   // Captcha — fully frontend, no backend call needed
   const [captchaText, setCaptchaText] = useState(() => makeCaptchaText());
@@ -120,35 +115,6 @@ const Register: React.FC<RegisterProps> = ({ onNavigate, onLoginSuccess }) => {
     setCaptchaInput("");
   };
 
-  // ── Send OTP ──────────────────────────────────────────────────────────────
-  const handleSendOtp = async () => {
-    if (!phone || phone.length !== 10) {
-      setError("Please enter a valid 10-digit phone number");
-      return;
-    }
-    setError("");
-    setSendingOtp(true);
-    setOtpMessage("");
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.message || "Failed to send OTP. Please try again.");
-        return;
-      }
-      setOtpSent(true);
-      setOtpMessage("✅ OTP sent! Check your phone.");
-    } catch {
-      setError("Network error: Unable to connect to server.");
-    } finally {
-      setSendingOtp(false);
-    }
-  };
-
   // ── Submit ─────────────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -188,7 +154,7 @@ const Register: React.FC<RegisterProps> = ({ onNavigate, onLoginSuccess }) => {
           email,
           password,
           phone,
-          otp: otp || "000000", // OTP is optional if backend allows
+          otp: "000000", // bypassed on backend
           captchaToken: "frontend-validated",
           captchaInput: captchaText, // send correct text so backend passes
         }),
@@ -247,44 +213,18 @@ const Register: React.FC<RegisterProps> = ({ onNavigate, onLoginSuccess }) => {
             />
           </div>
 
-          {/* Phone + Send OTP */}
-          <div className="phone-otp-row">
-            <div className="input-group flex-1">
-              <FiPhone className="input-icon" />
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                maxLength={10}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                disabled={otpSent}
-                required
-              />
-            </div>
-            <button
-              type="button"
-              className="otp-send-btn"
-              onClick={handleSendOtp}
-              disabled={sendingOtp || !phone || phone.length !== 10}
-            >
-              {sendingOtp ? "Sending..." : otpSent ? "Resend" : "Send OTP"}
-            </button>
+          {/* Phone Number */}
+          <div className="input-group">
+            <FiPhone className="input-icon" />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              maxLength={10}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+              required
+            />
           </div>
-
-          {otpMessage && <p className="otp-status-success">{otpMessage}</p>}
-
-          {otpSent && (
-            <div className="input-group slide-in">
-              <FiShield className="input-icon" />
-              <input
-                type="text"
-                placeholder="Enter 6-Digit OTP code"
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-              />
-            </div>
-          )}
 
           {/* Password */}
           <div className="input-group">

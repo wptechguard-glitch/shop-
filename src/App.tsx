@@ -398,13 +398,16 @@ const App: React.FC = () => {
   return (
     <>
       <Navbar
+        currentPage={page}
         cartCount={cartCount}
         wishlistCount={wishlist.length}
         onNavigate={setPage}
         currentUser={currentUser}
         onLogout={handleLogout}
       />
-      {renderPage()}
+      <main className={page === "home" ? "main-content main-content--home" : "main-content"}>
+        {renderPage()}
+      </main>
       {page === "home" && <Footer />}
       <BottomNav active={page} cartCount={cartCount} wishlistCount={wishlist.length} onNavigate={setPage} />
     </>
