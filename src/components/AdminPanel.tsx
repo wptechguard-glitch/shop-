@@ -8,7 +8,7 @@ import { API_BASE_URL } from "../api";
 import type { Product } from "../data/products";
 import placeholderImg from "../assets/placeholder.svg";
 
-const ADMIN_SECRET = "shopkart_admin_2024_secure";
+const ADMIN_SECRET = "c277b72c188553d93d155b8cf205ab8ddd325a0329c5120846b356e7804e77fc";
 
 interface AdminOrder {
   _id: string;
