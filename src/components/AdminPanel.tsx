@@ -123,8 +123,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
-  // Active panel tab: "orders" or "products"
-  const [activeTab, setActiveTab] = useState<"orders" | "products">("orders");
+  // Active panel tab: "orders" or "products" or "settings"
+  const [activeTab, setActiveTab] = useState<"orders" | "products" | "settings">("orders");
+  const [isCodEnabled, setIsCodEnabled] = useState(true);
 
   // Product Form State
   const [showProductForm, setShowProductForm] = useState(false);
@@ -146,9 +147,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [ordersRes, statsRes] = await Promise.all([
+      const [ordersRes, statsRes, configRes] = await Promise.all([
         fetch(`${API_BASE_URL}/admin/orders`, { headers }),
         fetch(`${API_BASE_URL}/admin/stats`, { headers }),
+        fetch(`${API_BASE_URL}/config`),
       ]);
       if (ordersRes.ok) {
         const data = await ordersRes.json();
@@ -158,10 +160,34 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
         const data = await statsRes.json();
         setStats(data);
       }
+      if (configRes.ok) {
+        const data = await configRes.json();
+        setIsCodEnabled(data.isCodEnabled);
+      }
     } catch (err) {
       console.error("Admin fetch error:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleCod = async (newVal: boolean) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/config`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ isCodEnabled: newVal }),
+      });
+      if (res.ok) {
+        setIsCodEnabled(newVal);
+        alert(`Cash on Delivery ${newVal ? "Enabled" : "Disabled"} successfully!`);
+      } else {
+        const data = await res.json();
+        alert(data.message || "Failed to update configuration");
+      }
+    } catch (err) {
+      console.error("Update config error:", err);
+      alert("Network error: Failed to update configuration");
     }
   };
 
@@ -426,7 +452,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
           <FiShoppingBag size={22} color="#b8a0d4" />
           <div>
             <h1>Gaurangi Admin</h1>
-            <p>{activeTab === "orders" ? "Order Management Panel" : "Inventory & Products Panel"}</p>
+            <p>{activeTab === "orders" ? "Order Management Panel" : activeTab === "products" ? "Inventory & Products Panel" : "Global System Settings"}</p>
           </div>
         </div>
         
@@ -443,6 +469,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
             onClick={() => { setActiveTab("products"); setSearch(""); }}
           >
             Products
+          </button>
+          <button 
+            className={`admin-panel-tab-btn ${activeTab === "settings" ? "active" : ""}`}
+            onClick={() => { setActiveTab("settings"); setSearch(""); }}
+          >
+            Settings
           </button>
         </div>
 
@@ -901,6 +933,72 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
               )}
             </div>
           </>
+        )}
+
+        {/* ── Active View: SETTINGS tab ── */}
+        {activeTab === "settings" && (
+          <div className="admin-settings-card" style={{
+            background: "white",
+            padding: "30px",
+            borderRadius: "12px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+            maxWidth: "600px",
+            margin: "20px auto 0 auto"
+          }}>
+            <h3 style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px", color: "#2d1b4e" }}>
+              <FiTruck size={20} color="#b8a0d4" /> Payment Gateways & Methods
+            </h3>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 0",
+              borderTop: "1px solid #eee",
+              borderBottom: "1px solid #eee"
+            }}>
+              <div>
+                <h4 style={{ margin: "0 0 6px 0", color: "#2d1b4e", fontSize: "15px" }}>Cash on Delivery (COD)</h4>
+                <p style={{ margin: 0, fontSize: "13px", color: "#777", lineHeight: "1.4" }}>
+                  Enable or disable Cash on Delivery payment option at client checkout.
+                </p>
+              </div>
+              <div>
+                <label className="toggle-switch" style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "52px",
+                  height: "28px"
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={isCodEnabled}
+                    onChange={(e) => handleToggleCod(e.target.checked)}
+                    style={{ opacity: 0, width: 0, height: 0 }}
+                  />
+                  <span className="slider" style={{
+                    position: "absolute",
+                    cursor: "pointer",
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: isCodEnabled ? "#34a853" : "#ccc",
+                    transition: ".4s",
+                    borderRadius: "28px"
+                  }}>
+                    <span style={{
+                      position: "absolute",
+                      content: "",
+                      height: "20px",
+                      width: "20px",
+                      left: isCodEnabled ? "28px" : "4px",
+                      bottom: "4px",
+                      backgroundColor: "white",
+                      transition: ".4s",
+                      borderRadius: "50%"
+                    }} />
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
         )}
 
       </div>

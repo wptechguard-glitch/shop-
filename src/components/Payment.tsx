@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiCreditCard, FiSmartphone, FiTruck, FiLock, FiAlertCircle, FiXCircle } from "react-icons/fi";
 import { API_BASE_URL } from "../api";
 import "../index.css";
@@ -40,6 +40,22 @@ const Payment: React.FC<PaymentProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [paymentFailed, setPaymentFailed] = useState(false);
+  const [isCodEnabled, setIsCodEnabled] = useState(true);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/config`);
+        if (response.ok) {
+          const data = await response.json();
+          setIsCodEnabled(data.isCodEnabled);
+        }
+      } catch (err) {
+        console.error("Failed to fetch COD configuration:", err);
+      }
+    };
+    fetchConfig();
+  }, []);
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -273,14 +289,26 @@ const Payment: React.FC<PaymentProps> = ({
             >
               <FiSmartphone className="icon" /> UPI (Roxpay)
             </button>
-            <button
-              type="button"
-              className={method === "cod" ? "toggle-btn active" : "toggle-btn"}
-              onClick={() => setMethod("cod")}
-              disabled={loading}
-            >
-              <FiTruck className="icon" /> Cash on Delivery
-            </button>
+            {isCodEnabled ? (
+              <button
+                type="button"
+                className={method === "cod" ? "toggle-btn active" : "toggle-btn"}
+                onClick={() => setMethod("cod")}
+                disabled={loading}
+              >
+                <FiTruck className="icon" /> Cash on Delivery
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="toggle-btn disabled-btn"
+                style={{ opacity: 0.5, cursor: "not-allowed" }}
+                disabled={true}
+                title="Cash on Delivery is temporarily disabled by admin"
+              >
+                <FiTruck className="icon" style={{ marginRight: "8px" }} /> COD (Disabled)
+              </button>
+            )}
           </div>
 
           <form onSubmit={handlePay}>
