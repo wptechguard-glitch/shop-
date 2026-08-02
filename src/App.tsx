@@ -22,6 +22,7 @@ import CategoryShowcase from "./components/CategoryShowcase";
 import SectionHeader from "./components/SectionHeader";
 import { API_BASE_URL } from "./api";
 import { FiSearch } from "react-icons/fi";
+import SupportChat from "./components/SupportChat";
 
 export interface OrderItem {
   id: string | number;
@@ -32,6 +33,8 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
+  _id?: string;
+  orderId?: string;
   items: OrderItem[];
   total: number;
   address: Address;
@@ -282,7 +285,7 @@ const App: React.FC = () => {
     if (page === "order-success" && lastOrder)
       return (
         <OrderSuccess
-          orderId={lastOrder.id}
+          orderId={lastOrder.orderId || lastOrder.id || lastOrder._id || ""}
           totalAmount={lastOrder.total}
           paymentMethod={lastOrder.paymentMethod}
           onNavigate={setPage}
@@ -498,6 +501,7 @@ const App: React.FC = () => {
       </main>
       {page === "home" && <Footer />}
       <BottomNav active={page} cartCount={cartCount} wishlistCount={wishlist.length} onNavigate={setPage} />
+      <SupportChat orders={orders} />
     </>
   );
 };

@@ -29,7 +29,7 @@ const OrderDetail: React.FC<{ order: Order; onBack: () => void }> = ({ order, on
       <div className="order-detail-header">
         <div>
           <p className="order-id-label"><FiHash style={{ marginRight: 4 }} />Order ID</p>
-          <h2 className="order-detail-id">{order.id}</h2>
+          <h2 className="order-detail-id">{order.orderId || order.id || order._id}</h2>
           <p className="order-detail-meta">
             <FiCalendar size={12} style={{ marginRight: 4 }} />{order.date}
             &nbsp;•&nbsp;
@@ -164,13 +164,13 @@ const MyOrders: React.FC<MyOrdersProps> = ({ orders, onNavigate }) => {
           return (
             <div
               className="order-card order-card-clickable"
-              key={order.id}
+              key={order.orderId || order.id || order._id}
               onClick={() => setSelectedOrder(order)}
             >
               <div className="order-card-top">
                 <div>
                   <span className="order-id-label">Order ID</span>
-                  <p className="order-id-value">{order.id}</p>
+                  <p className="order-id-value">{order.orderId || order.id || order._id}</p>
                 </div>
                 <span
                   className="order-status-badge"
@@ -200,7 +200,7 @@ const MyOrders: React.FC<MyOrdersProps> = ({ orders, onNavigate }) => {
                 </div>
               </div>
 
-              <p className="order-track-hint">👆 Click to view details & track order</p>
+              <p className="order-track-hint">Click to view details & track order</p>
             </div>
           );
         })}
