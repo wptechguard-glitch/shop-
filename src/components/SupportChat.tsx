@@ -28,7 +28,7 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: "bot",
-      text: "Hello! Welcome to Gaurangi Customer Support. How can I help you today? 🌸",
+      text: "Hello! Welcome to Gaurangi Customer Support. How can I help you today?",
       timestamp: new Date(),
     },
   ]);
@@ -110,26 +110,26 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
         );
 
         if (foundOrder) {
-          botReply = `📦 Found your order! \n\n• Status: **${foundOrder.status}**\n• Date Placed: ${foundOrder.date}\n• Payment: ${foundOrder.paymentMethod}\n• Total Amount: ₹${foundOrder.total}`;
+          botReply = `Found your order! \n\n• Status: **${foundOrder.status}**\n• Date Placed: ${foundOrder.date}\n• Payment: ${foundOrder.paymentMethod}\n• Total Amount: ₹${foundOrder.total}`;
         } else {
-          botReply = `❌ Sorry, I couldn't find any order matching ID "${cleanId}" in your account. Please make sure the ID is correct or choose "Contact Support" below.`;
+          botReply = `Sorry, I couldn't find any order matching ID "${cleanId}" in your account. Please make sure the ID is correct or choose "Contact Support" below.`;
         }
       } else if (lower.includes("track") || lower.includes("order")) {
         setAwaitingOrderId(true);
         botReply = "Please enter your Order ID (e.g., ORD12345678) to track your package status:";
       } else if (lower.includes("return") || lower.includes("refund") || lower.includes("policy")) {
-        botReply = "🔄 Return & Refund Policy:\n\nYou can return or exchange any item within 7 days of delivery. Items must be unused and in original packaging. Refunds are processed within 3-5 business days after product pickup.";
+        botReply = "Return & Refund Policy:\n\nYou can return or exchange any item within 7 days of delivery. Items must be unused and in original packaging. Refunds are processed within 3-5 business days after product pickup.";
       } else if (lower.includes("delivery") || lower.includes("time") || lower.includes("ship")) {
-        botReply = "🚚 Delivery Times:\n\nStandard shipping takes 3-5 business days depending on your location. We will send an SMS dispatch alert once it leaves our warehouse.";
+        botReply = "Delivery Times:\n\nStandard shipping takes 3-5 business days depending on your location. We will send an SMS dispatch alert once it leaves our warehouse.";
       } else if (lower.includes("agent") || lower.includes("contact") || lower.includes("call") || lower.includes("support")) {
-        botReply = "📞 Contact Customer Support:\n\nYou can email us directly at **support@gaurangi.in** or call our support helpline at **+91 99999-88888** (Mon-Sat, 10 AM to 6 PM).";
+        botReply = "Contact Customer Support:\n\nYou can email us directly at **support@gaurangi.in** or call our support helpline at **+91 99999-88888** (Mon-Sat, 10 AM to 6 PM).";
       } else if (lower.includes("hi") || lower.includes("hello") || lower.includes("hey")) {
         botReply = "Hi there! How can I help you today? Please choose one of the quick options or ask a question.";
       } else if (lower.includes("thank")) {
-        botReply = "You're welcome! Let me know if you need anything else. Happy shopping! 😊";
+        botReply = "You're welcome! Let me know if you need anything else. Happy shopping!";
       } else {
         // Fallback responder requested by user
-        botReply = "Our support team will get in touch with you shortly. Thank you for your patience! 🙏";
+        botReply = "Our support team will get in touch with you shortly. Thank you for your patience!";
       }
 
       // Add bot message locally
@@ -215,7 +215,7 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
                   boxShadow: "0 0 8px #34a853",
                 }}
               />
-              <span style={{ fontWeight: 600, fontSize: "15px" }}>Gaurangi Assistant 🌸</span>
+              <span style={{ fontWeight: 600, fontSize: "15px" }}>Gaurangi Assistant</span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -250,7 +250,7 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
               } else if (msg.sender === "admin") {
                 bubbleBg = "#d1ecf1";
                 alignSelf = "flex-start";
-                label = "GAURANGI AGENT 🎧";
+                label = "GAURANGI AGENT";
               }
 
               return (
@@ -305,7 +305,7 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
                 fontWeight: 500,
               }}
             >
-              📦 Track Order
+              Track Order
             </button>
             <button
               onClick={() => handleQuickAction("Return Policy")}
@@ -320,7 +320,7 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
                 fontWeight: 500,
               }}
             >
-              🔄 Return Policy
+              Return Policy
             </button>
             <button
               onClick={() => handleQuickAction("Contact Support")}
@@ -335,7 +335,7 @@ const SupportChat: React.FC<SupportChatProps> = ({ orders, currentUser }) => {
                 fontWeight: 500,
               }}
             >
-              📞 Contact Support
+              Contact Support
             </button>
           </div>
 
