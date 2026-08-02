@@ -21,6 +21,7 @@ import FeaturesRow from "./components/FeaturesRow";
 import CategoryShowcase from "./components/CategoryShowcase";
 import SectionHeader from "./components/SectionHeader";
 import { API_BASE_URL } from "./api";
+import { FiSearch } from "react-icons/fi";
 
 export interface OrderItem {
   id: string | number;
@@ -97,7 +98,9 @@ const App: React.FC = () => {
             rating: p.rating || 4.0,
             images: p.images && p.images.length > 0 ? p.images : ["", "", "", ""],
             category: p.category,
-            inStock: p.inStock
+            inStock: p.inStock,
+            stockQuantity: p.stockQuantity,
+            sizes: p.sizes
           }));
           setProductsList(mapped);
         }
@@ -317,6 +320,70 @@ const App: React.FC = () => {
           wishlist={wishlist}
           onNavigate={setPage}
         />
+      );
+    }
+
+    if (page.startsWith("search:")) {
+      const query = page.split(":")[1] || "";
+      const decodedQuery = decodeURIComponent(query).toLowerCase().trim();
+      const filteredProducts = productsList.filter(
+        (p) =>
+          p.name.toLowerCase().includes(decodedQuery) ||
+          p.category.toLowerCase().includes(decodedQuery)
+      );
+
+      return (
+        <div className="search-page home-section" style={{ padding: "40px 20px" }}>
+          <div className="search-header" style={{ marginBottom: "30px", textAlign: "center" }}>
+            <h2 className="section-title">Search Results for "{decodedQuery}"</h2>
+            <p className="search-subtitle" style={{ color: "#7a7371" }}>
+              Found {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""}
+            </p>
+          </div>
+          {filteredProducts.length > 0 ? (
+            <div className="product-grid" style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+              gap: "24px",
+              maxWidth: "1200px",
+              margin: "0 auto"
+            }}>
+              {filteredProducts.map((p) => (
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  onAddToCart={addToCart}
+                  onToggleWishlist={toggleWishlist}
+                  isWishlisted={wishlist.some((x) => String(x) === String(p.id))}
+                  onNavigate={setPage}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state" style={{ padding: "80px 24px", textAlign: "center" }}>
+              <FiSearch size={48} style={{ color: "#b8a0d4", marginBottom: "16px" }} />
+              <h3>No products found</h3>
+              <p style={{ color: "#7a7371", marginBottom: "24px" }}>
+                Try checking your spelling or search for another term.
+              </p>
+              <button 
+                className="continue-btn"
+                style={{ 
+                  background: "#14213d", 
+                  color: "white", 
+                  border: "none", 
+                  padding: "12px 28px", 
+                  borderRadius: "30px",
+                  fontWeight: 600,
+                  cursor: "pointer"
+                }}
+                onClick={() => setPage("category")}
+              >
+                Browse All Products
+              </button>
+            </div>
+          )}
+        </div>
       );
     }
 
