@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiCreditCard, FiSmartphone, FiTruck, FiLock, FiAlertCircle } from "react-icons/fi";
+import { FiCreditCard, FiSmartphone, FiTruck, FiLock, FiAlertCircle, FiXCircle } from "react-icons/fi";
 import { API_BASE_URL } from "../api";
 import "../index.css";
 
@@ -39,6 +39,7 @@ const Payment: React.FC<PaymentProps> = ({
   const [upiId, setUpiId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [paymentFailed, setPaymentFailed] = useState(false);
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,12 +141,15 @@ const Payment: React.FC<PaymentProps> = ({
               onPaymentSuccess(verifyData.order);
             } catch (err: any) {
               setError(err.message || "Payment verification failed");
+              setPaymentFailed(true);
               setLoading(false);
             }
           },
           modal: {
             ondismiss: () => {
               setLoading(false);
+              setError("Payment checkout window was closed by user.");
+              setPaymentFailed(true);
             },
           },
         };
@@ -182,12 +186,14 @@ const Payment: React.FC<PaymentProps> = ({
             onPaymentSuccess(verifyData.order);
           } catch (err: any) {
             setError(err.message || "Simulated payment failed");
+            setPaymentFailed(true);
             setLoading(false);
           }
         }, 1500);
       }
     } catch (err: any) {
       setError(err.message || "An unexpected payment error occurred");
+      setPaymentFailed(true);
       setLoading(false);
     }
   };
@@ -205,9 +211,50 @@ const Payment: React.FC<PaymentProps> = ({
       </div>
 
       <div className="checkout-layout">
-        <div className="checkout-form-card payment-card">
-          <h2>Payment Method</h2>
-          <p className="auth-sub">Secure Checkout — Total Amount: ₹{totalAmount}</p>
+        {paymentFailed ? (
+          <div className="checkout-form-card payment-card failed-card" style={{ textAlign: "center", padding: "40px 24px" }}>
+            <div style={{
+              width: "72px",
+              height: "72px",
+              borderRadius: "50%",
+              background: "#ffebee",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 20px auto"
+            }}>
+              <FiXCircle size={40} color="#e53935" />
+            </div>
+            <h2 style={{ color: "#e53935", marginBottom: "10px" }}>Payment Failed or Cancelled</h2>
+            <p className="auth-sub" style={{ maxWidth: "400px", margin: "0 auto 24px auto", lineHeight: "1.6" }}>
+              {error || "Your transaction was not completed. If any amount was debited, it will be automatically refunded within 3-5 business days."}
+            </p>
+            <div style={{ display: "flex", gap: "16px", justifyContent: "center" }}>
+              <button
+                type="button"
+                className="auth-btn"
+                style={{ width: "auto", padding: "12px 28px", margin: 0, background: "#14213d", color: "white" }}
+                onClick={() => {
+                  setPaymentFailed(false);
+                  setError("");
+                }}
+              >
+                Try Again
+              </button>
+              <button
+                type="button"
+                className="auth-btn"
+                style={{ width: "auto", padding: "12px 28px", margin: 0, background: "#7a7371", color: "white" }}
+                onClick={() => onNavigate("cart")}
+              >
+                Back to Cart
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="checkout-form-card payment-card">
+            <h2>Payment Method</h2>
+            <p className="auth-sub">Secure Checkout — Total Amount: ₹{totalAmount}</p>
 
           <div className="method-toggle">
             <button
@@ -313,6 +360,7 @@ const Payment: React.FC<PaymentProps> = ({
             </button>
           </form>
         </div>
+        )}
 
         <div className="checkout-summary-card">
           <h4>Order Summary</h4>
