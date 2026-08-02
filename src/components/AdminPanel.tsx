@@ -123,9 +123,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
-  // Active panel tab: "orders" or "products" or "settings"
-  const [activeTab, setActiveTab] = useState<"orders" | "products" | "settings">("orders");
+  // Active panel tab: "orders" or "products" or "settings" or "chats"
+  const [activeTab, setActiveTab] = useState<"orders" | "products" | "settings" | "chats">("orders");
   const [isCodEnabled, setIsCodEnabled] = useState(true);
+
+  // Chat States
+  const [chatSessions, setChatSessions] = useState<any[]>([]);
+  const [selectedChatUserId, setSelectedChatUserId] = useState<string | null>(null);
+  const [adminReplyText, setAdminReplyText] = useState("");
 
   // Product Form State
   const [showProductForm, setShowProductForm] = useState(false);
@@ -191,12 +196,75 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
     }
   };
 
+  const fetchChats = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/chats/admin/list`, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        setChatSessions(data.chats || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch chats:", err);
+    }
+  };
+
+  const handleAdminReply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedChatUserId || !adminReplyText.trim()) return;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/chats/admin/reply`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ userId: selectedChatUserId, text: adminReplyText }),
+      });
+      if (res.ok) {
+        setAdminReplyText("");
+        fetchChats();
+      } else {
+        const data = await res.json();
+        alert(data.message || "Failed to send reply");
+      }
+    } catch (err) {
+      console.error("Failed to send admin reply:", err);
+    }
+  };
+
+  const handleResolveChat = async (userId: string) => {
+    if (!window.confirm("Are you sure you want to resolve and archive this chat session?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/chats/admin/resolve/${userId}`, {
+        method: "PUT",
+        headers,
+      });
+      if (res.ok) {
+        if (selectedChatUserId === userId) {
+          setSelectedChatUserId(null);
+        }
+        fetchChats();
+      } else {
+        const data = await res.json();
+        alert(data.message || "Failed to resolve chat");
+      }
+    } catch (err) {
+      console.error("Failed to resolve chat:", err);
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
       fetchData();
       onRefreshProducts();
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn && activeTab === "chats") {
+      fetchChats();
+      const interval = setInterval(fetchChats, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isLoggedIn, activeTab, selectedChatUserId]);
 
   const updateStatus = async (orderId: string, newStatus: string) => {
     setUpdatingId(orderId);
@@ -452,7 +520,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
           <FiShoppingBag size={22} color="#b8a0d4" />
           <div>
             <h1>Gaurangi Admin</h1>
-            <p>{activeTab === "orders" ? "Order Management Panel" : activeTab === "products" ? "Inventory & Products Panel" : "Global System Settings"}</p>
+            <p>{activeTab === "orders" ? "Order Management Panel" : activeTab === "products" ? "Inventory & Products Panel" : activeTab === "chats" ? "Customer Live Chat Support" : "Global System Settings"}</p>
           </div>
         </div>
         
@@ -475,6 +543,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
             onClick={() => { setActiveTab("settings"); setSearch(""); }}
           >
             Settings
+          </button>
+          <button 
+            className={`admin-panel-tab-btn ${activeTab === "chats" ? "active" : ""}`}
+            onClick={() => { setActiveTab("chats"); setSearch(""); }}
+          >
+            Chats
           </button>
         </div>
 
@@ -997,6 +1071,223 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onNavigate, products, onRefresh
                   </span>
                 </label>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Active View: CHATS tab ── */}
+        {activeTab === "chats" && (
+          <div style={{ display: "flex", gap: "24px", height: "calc(100vh - 200px)", minHeight: "500px" }}>
+            {/* Left Column: Chat Sessions List */}
+            <div style={{
+              width: "320px",
+              background: "white",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden"
+            }}>
+              <div style={{ padding: "16px", borderBottom: "1px solid #eee", background: "#f8f9fa" }}>
+                <h4 style={{ margin: 0, color: "#2d1b4e" }}>Active Discussions</h4>
+              </div>
+              <div style={{ flex: 1, overflowY: "auto" }}>
+                {chatSessions.length === 0 ? (
+                  <p style={{ padding: "20px", textAlign: "center", color: "#999", fontSize: "13px" }}>No active chats.</p>
+                ) : (
+                  chatSessions.map((session) => {
+                    const isSelected = selectedChatUserId === session.userId;
+                    const lastMsg = session.messages[session.messages.length - 1];
+                    const isResolved = session.status === "resolved";
+
+                    return (
+                      <div
+                        key={session.userId}
+                        onClick={() => setSelectedChatUserId(session.userId)}
+                        style={{
+                          padding: "14px 16px",
+                          borderBottom: "1px solid #f0f0f0",
+                          cursor: "pointer",
+                          background: isSelected ? "#f1ecf7" : "transparent",
+                          transition: "background 0.2s",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                          <strong style={{ fontSize: "13px", color: isSelected ? "#2d1b4e" : "#333", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: "160px" }}>
+                            {session.userEmail}
+                          </strong>
+                          <span style={{
+                            fontSize: "10px",
+                            padding: "2px 6px",
+                            borderRadius: "10px",
+                            background: isResolved ? "#e2e3e5" : "#d4edda",
+                            color: isResolved ? "#383d41" : "#155724",
+                            fontWeight: 600
+                          }}>
+                            {session.status.toUpperCase()}
+                          </span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: "11px", color: "#777", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
+                          {lastMsg ? lastMsg.text : "No messages"}
+                        </p>
+                        <span style={{ fontSize: "9px", color: "#bbb" }}>
+                          {new Date(session.updatedAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            {/* Right Column: Selected Chat Conversation Window */}
+            <div style={{
+              flex: 1,
+              background: "white",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden"
+            }}>
+              {selectedChatUserId ? (() => {
+                const activeSession = chatSessions.find(s => s.userId === selectedChatUserId);
+                if (!activeSession) return <div style={{ flex: 1, display: "flex", alignItems: "center", justifyItems: "center" }}><p style={{ margin: "auto", color: "#999" }}>Select a conversation to view</p></div>;
+                
+                return (
+                  <>
+                    {/* Header */}
+                    <div style={{
+                      padding: "16px",
+                      borderBottom: "1px solid #eee",
+                      background: "#f8f9fa",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}>
+                      <div>
+                        <h4 style={{ margin: 0, color: "#2d1b4e" }}>{activeSession.userEmail}</h4>
+                        <span style={{ fontSize: "11px", color: "#777" }}>User ID: {activeSession.userId}</span>
+                      </div>
+                      <button
+                        onClick={() => handleResolveChat(activeSession.userId)}
+                        style={{
+                          background: "#e53935",
+                          color: "white",
+                          border: "none",
+                          padding: "6px 12px",
+                          borderRadius: "4px",
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          cursor: "pointer"
+                        }}
+                      >
+                        Resolve & Archive
+                      </button>
+                    </div>
+
+                    {/* Messages Area */}
+                    <div style={{
+                      flex: 1,
+                      padding: "20px",
+                      overflowY: "auto",
+                      background: "#fafafa",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "12px"
+                    }}>
+                      {activeSession.messages.map((msg: any, i: number) => {
+                        const isAdmin = msg.sender === "admin";
+                        const isUser = msg.sender === "user";
+                        
+                        let bubbleBg = "#e9ecef";
+                        let alignSelf: "flex-start" | "flex-end" = "flex-start";
+                        let label = msg.sender.toUpperCase();
+
+                        if (isAdmin) {
+                          bubbleBg = "#d1ecf1";
+                          alignSelf = "flex-end";
+                          label = "YOU (ADMIN)";
+                        } else if (isUser) {
+                          bubbleBg = "#e2dcf2";
+                          alignSelf = "flex-start";
+                          label = "CUSTOMER";
+                        } else {
+                          bubbleBg = "#fff";
+                          alignSelf = "flex-start";
+                          label = "BOT RESPONDER";
+                        }
+
+                        return (
+                          <div key={i} style={{ display: "flex", flexDirection: "column", alignSelf, maxWidth: "70%" }}>
+                            <span style={{ fontSize: "9px", color: "#999", fontWeight: 700, marginBottom: "3px", alignSelf: isAdmin ? "flex-end" : "flex-start" }}>
+                              {label}
+                            </span>
+                            <div style={{
+                              background: bubbleBg,
+                              color: "#333",
+                              padding: "10px 14px",
+                              borderRadius: isAdmin ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
+                              fontSize: "13px",
+                              lineHeight: "1.5",
+                              whiteSpace: "pre-line",
+                              boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
+                            }}>
+                              {msg.text}
+                            </div>
+                            <span style={{ fontSize: "8px", color: "#bbb", marginTop: "2px", alignSelf: isAdmin ? "flex-end" : "flex-start" }}>
+                              {new Date(msg.timestamp).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Reply Input Bar */}
+                    <form onSubmit={handleAdminReply} style={{
+                      display: "flex",
+                      borderTop: "1px solid #eee",
+                      padding: "12px 16px",
+                      background: "white"
+                    }}>
+                      <input
+                        type="text"
+                        placeholder="Type reply to client..."
+                        value={adminReplyText}
+                        onChange={(e) => setAdminReplyText(e.target.value)}
+                        style={{
+                          flex: 1,
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          padding: "8px 12px",
+                          outline: "none",
+                          fontSize: "13px"
+                        }}
+                      />
+                      <button
+                        type="submit"
+                        style={{
+                          background: "#2d1b4e",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          padding: "8px 20px",
+                          marginLeft: "12px",
+                          fontWeight: 600,
+                          fontSize: "13px",
+                          cursor: "pointer"
+                        }}
+                      >
+                        Send
+                      </button>
+                    </form>
+                  </>
+                );
+              })() : (
+                <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <p style={{ color: "#999", fontSize: "14px" }}>Select a chat session from active discussions list to begin support.</p>
+                </div>
+              )}
             </div>
           </div>
         )}

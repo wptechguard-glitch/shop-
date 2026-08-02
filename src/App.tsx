@@ -501,7 +501,7 @@ const App: React.FC = () => {
       </main>
       {page === "home" && <Footer />}
       <BottomNav active={page} cartCount={cartCount} wishlistCount={wishlist.length} onNavigate={setPage} />
-      <SupportChat orders={orders} />
+      <SupportChat orders={orders} currentUser={currentUser} />
     </>
   );
 };
